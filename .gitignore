@@ -1,2 +1,4 @@
-assets/moodle_*
+assets/moodle_modules/*
+assets/moodledata_*
+assets/moodle_moodle*
 containerid.txt

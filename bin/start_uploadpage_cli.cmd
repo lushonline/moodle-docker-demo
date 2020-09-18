@@ -17,7 +17,7 @@ echo *** Moodle DB: %MOODLE_DOCKER_DB%
 echo *** Moodle PHP: %MOODLE_DOCKER_PHP_VERSION%
 echo *** Moodle Upload File: %MOODLE_UPLOAD_FILE%
 echo *** Moodle Upload Category Id: %MOODLE_UPLOAD_CATEGORYID%
-echo *** Moodle CLI Script: admin/tool/uploadexternalcontent/cli/uploadexternalpage.php
+echo *** Moodle CLI Script: admin/tool/uploadpage/cli/uploadpage.php
 echo.
 
 PUSHD %cd%
