@@ -11,7 +11,7 @@ SET BASEDIR=%cd%
 POPD
 
 
-SET MOODLE_DOCKER_NGROK_HOST=
+SET "MOODLE_DOCKER_NGROK_HOST="
 
 echo ***Bring Docker Containers Down
 echo.
