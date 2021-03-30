@@ -165,9 +165,10 @@ echo.
 :CLONEEXTERNALCONTENT
 IF EXIST %BASEDIR%\assets\moodle_modules\mod\externalcontent\%NUL% GOTO FETCHEXTERNALCONTENT
 echo.
-echo *** Cloning moodle-tool_uploadexternalcontentresults
+echo *** Cloning moodle-mod_externalcontent
 echo.
-git clone git://github.com/lushonline/moodle-mod_externalcontent %BASEDIR%\assets\moodle_modules\mod\externalcontent
+# git clone git://github.com/lushonline/moodle-mod_externalcontent %BASEDIR%\assets\moodle_modules\mod\externalcontent
+git clone --branch realtimetrack --depth 1 --single-branch git://github.com/lushonline/moodle-mod_externalcontent %BASEDIR%\assets\moodle_modules\mod\externalcontent
 echo.
 GOTO FINISHMODULES
 

@@ -246,7 +246,6 @@ It uses the [uploadpageresults.csv](assets/moodle_files/uploadpageresults.csv) w
 
 This NODE project can be used to generate files to use for import [https://github.com/martinholden-skillsoft/moodle-percipio-externalcontentresults](hhttps://github.com/martinholden-skillsoft/moodle-percipio-externalcontentresults)
 
-
 ```bash
 c:\moodle-docker-demo>bin\start_uploadpageresults_cli.cmd
 

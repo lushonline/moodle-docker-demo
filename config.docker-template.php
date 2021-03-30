@@ -1,5 +1,18 @@
-<?php  // Moodle configuration file
-
+<?php 
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 unset($CFG);
 global $CFG;
 $CFG = new stdClass();
@@ -44,6 +57,9 @@ $CFG->smtphosts = 'mailhog:1025';
 $CFG->noreplyaddress = 'noreply@example.com';
 
 // Debug options - possible to be controlled by flag in future..
+$CFG->debug = (E_ALL | E_STRICT); // DEBUG_DEVELOPER.
+$CFG->debugdisplay = 1;
+$CFG->debugstringids = 1; // Add strings=1 to url to get string ids.
 $CFG->allowthemechangeonurl = 1;
 $CFG->passwordpolicy = 0;
 

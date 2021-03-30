@@ -38,6 +38,7 @@ echo.
 echo *** Copy extra PHP configuration to webserver
 echo.
 docker cp docker-php-limits.ini %containerid%:/usr/local/etc/php/conf.d/docker-php-limits.ini
+docker cp docker-php-ext-xdebug-extras.ini %containerid%:/usr/local/etc/php/conf.d/docker-php-ext-xdebug-extras.ini
 echo.
 
 echo.
@@ -45,6 +46,7 @@ echo *** Restart Apache
 echo.
 call %BASEDIR%\bin\moodle-docker-compose exec webserver bash -c "/etc/init.d/apache2 reload"
 echo.
+
 
 echo.
 echo *** Moodle is running please. Browse to - http://127.0.0.1:8000
