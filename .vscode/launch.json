@@ -10,7 +10,7 @@
       "request": "launch",
       "port": 9000,
       "pathMappings": {
-        "/var/www/html": "${workspaceFolder}/assets/moodle_MOODLE_39_STABLE"
+        "/var/www/html": "${workspaceFolder}/assets/moodle_MOODLE_311_STABLE"
       },
       "xdebugSettings": {
         "max_data": 65535,

@@ -1,7 +1,14 @@
 @ECHO OFF
-:: the first parameter is an optional filename
-IF "%1"=="" ( SET "MOODLE_UPLOAD_COMPLETIONFILE=uploadpageresults.csv" ) ELSE ( SET "MOODLE_UPLOAD_COMPLETIONFILE=%1" )
-SET MOODLE_VERSION=MOODLE_39_STABLE
+IF "%1"=="" (
+  IF "%MOODLE_VERSION%"=="" (
+    SET "MOODLE_VERSION=MOODLE_311_STABLE"
+  )
+) ELSE (
+  SET "MOODLE_VERSION=%1"
+)
+:: the second parameter is an optional filename
+IF "%2"=="" ( SET "MOODLE_UPLOAD_COMPLETIONFILE=uploadpageresults.csv" ) ELSE ( SET "MOODLE_UPLOAD_COMPLETIONFILE=%2" )
+
 SET MOODLE_DOCKER_DB=pgsql
 SET MOODLE_DOCKER_PHP_VERSION=7.4
 

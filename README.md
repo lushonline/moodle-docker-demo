@@ -1,6 +1,6 @@
-# moodle-docker-demo: Docker Containers for demo Moodle 3.9
+# moodle-docker-demo: Docker Containers for demo Moodle 3.11
 
-This repository contains Docker configuration aimed at easily running a copy of Moodle3.9 to demonstrate on a Windows 10 machine
+This repository contains Docker configuration aimed at easily running a copy of Moodle 3.11 to demonstrate on a Windows 10 machine
 
 # Windows Prerequisites
 
@@ -31,7 +31,7 @@ This repository contains Docker configuration aimed at easily running a copy of 
 
 From a Windows CMD prompt (not Powershell)
 
-The following steps will clone [MOODLE_39_STABLE](https://github.com/moodle/moodle/tree/MOODLE_39_STABLE) branch, start Docker Contents, and run Moodle CLI Install
+The following steps will clone [MOODLE_311_STABLE](https://github.com/moodle/moodle/tree/MOODLE_311_STABLE) branch, start Docker Contents, and run Moodle CLI Install
 
 ```bash
 c:\moodle-docker-demo>bin\setup_moodle.cmd
@@ -69,7 +69,7 @@ c:\moodle-docker-demo>bin\stop_moodle.cmd
 *** Running: moodle-docker-compose.cmd
 *** Parameters: down
 
-*** Moodle Version: MOODLE_39_STABLE
+*** Moodle Version: MOODLE_311_STABLE
 
 WARNING: The MOODLE_DOCKER_NGROK_HOST variable is not set. Defaulting to a blank string.
 Stopping moodle-docker-demo_webserver_1 ... done
@@ -100,7 +100,7 @@ c:\moodle-docker-demo>bin\start_moodle.cmd
 *** Running: moodle-docker-compose.cmd
 *** Parameters: exec webserver bash -c "/etc/init.d/apache2 reload"
 
-*** Moodle Version: MOODLE_39_STABLE
+*** Moodle Version: MOODLE_311_STABLE
 
 [ ok ] Reloading Apache httpd web server: apache2.
 
@@ -169,7 +169,7 @@ c:\moodle-docker-demo>bin\start_cron_cli.cmd
 *** Running: moodle-docker-compose.cmd
 *** Parameters: exec webserver php admin/cli/cron.php
 
-*** Moodle Version: MOODLE_39_STABLE
+*** Moodle Version: MOODLE_311_STABLE
 
 Server Time: Fri, 18 Sep 2020 08:17:17 +0100
 
@@ -208,7 +208,7 @@ c:\moodle-docker-demo>bin\start_uploadpage_cli.cmd
 *** Running: moodle-docker-compose.cmd
 *** Parameters: exec webserver php admin/tool/uploadpage/cli/uploadpage.php --source=../../../../uploadpage.csv --categoryid=1
 
-*** Moodle Version: MOODLE_39_STABLE
+*** Moodle Version: MOODLE_311_STABLE
 
 Upload single page courses (2020081700)
 
@@ -255,7 +255,7 @@ c:\moodle-docker-demo>bin\start_uploadpageresults_cli.cmd
 *** Running: moodle-docker-compose.cmd
 *** Parameters: exec webserver php admin/tool/uploadpageresults/cli/uploadpageresults.php --source=../../../../uploadpageresults.csv
 
-*** Moodle Version: MOODLE_39_STABLE
+*** Moodle Version: MOODLE_311_STABLE
 
 Upload page activities completions (2020081700)
 
@@ -299,7 +299,7 @@ c:\moodle-docker-demo>bin\start_uploadexternalcontent_cli.cmd
 *** Running: moodle-docker-compose.cmd
 *** Parameters: exec webserver php admin/tool/uploadexternalcontent/cli/uploadexternalcontent.php --source=../../../../uploadexternalcontent.csv --categoryid=1
 
-*** Moodle Version: MOODLE_39_STABLE
+*** Moodle Version: MOODLE_311_STABLE
 
 Upload external content courses (2020081300)
 
@@ -346,7 +346,7 @@ c:\moodle-docker-demo>bin\start_uploadexternalcontentresults_cli.cmd
 *** Running: moodle-docker-compose.cmd
 *** Parameters: exec webserver php admin/tool/uploadexternalcontentresults/cli/uploadexternalcontentresults.php --source=../../../../uploadexternalcontentresults.csv
 
-*** Moodle Version: MOODLE_39_STABLE
+*** Moodle Version: MOODLE_311_STABLE
 
 Upload external content completions (2020081300)
 

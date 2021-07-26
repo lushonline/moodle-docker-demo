@@ -20,7 +20,7 @@ SET ASSETDIR=%BASEDIR%\assets
 
 SET COMPOSE_CONVERT_WINDOWS_PATHS=true
 
-SET DOCKERCOMPOSE=docker-compose -f "%BASEDIR%\base.yml"
+SET DOCKERCOMPOSE=docker-compose --project-name "%MOODLE_VERSION%" -f "%BASEDIR%\base.yml"
 
 IF "%MOODLE_DOCKER_WEB_HOST%"=="" (
     SET MOODLE_DOCKER_WEB_HOST=localhost

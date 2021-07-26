@@ -17,6 +17,7 @@ services:
       PGADMIN_DEFAULT_EMAIL: "user@moodle.com"
       PGADMIN_DEFAULT_PASSWORD: "moodle"
     volumes:
+      - pgadmin:/var/lib/pgadmin
       - "${ASSETDIR}/pgadmin4/servers.json:/pgadmin4/servers.json"
     ports:
       - "5050:80"
@@ -43,3 +44,4 @@ services:
       MOODLE_DOCKER_NGROK_HOST: "${MOODLE_DOCKER_NGROK_HOST}"
 volumes:
   pgdata:
+  pgadmin:

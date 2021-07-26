@@ -1,9 +1,17 @@
 @ECHO OFF
+IF "%1"=="" (
+  IF "%MOODLE_VERSION%"=="" (
+    SET "MOODLE_VERSION=MOODLE_311_STABLE"
+  )
+) ELSE (
+  SET "MOODLE_VERSION=%1"
+)
 :: the first parameter is an optional filename
-IF "%1"=="" ( SET "MOODLE_UPLOAD_FILE=uploadexternalcontent.csv" ) ELSE ( SET "MOODLE_UPLOAD_FILE=%1" )
+IF "%2"=="" ( SET "MOODLE_UPLOAD_FILE=uploadexternalcontent.csv" ) ELSE ( SET "MOODLE_UPLOAD_FILE=%2" )
 :: the second parameter is an optional categoryid
-IF "%2"=="" ( SET "MOODLE_UPLOAD_CATEGORYID=1" ) ELSE ( SET "MOODLE_UPLOAD_CATEGORYID=%2" )
-SET MOODLE_VERSION=MOODLE_39_STABLE
+IF "%3"=="" ( SET "MOODLE_UPLOAD_CATEGORYID=1" ) ELSE ( SET "MOODLE_UPLOAD_CATEGORYID=%3" )
+
+
 SET MOODLE_DOCKER_DB=pgsql
 SET MOODLE_DOCKER_PHP_VERSION=7.4
 
