@@ -55,6 +55,17 @@ call %BASEDIR%\bin\moodle-docker-compose exec webserver php admin/cli/install_da
 echo.
 
 echo.
+echo *** Run the Moodle CLI script: admin/cli/cfg.php to configure the xapi credentials
+echo.
+call %BASEDIR%\bin\moodle-docker-compose exec webserver php admin/cli/cfg.php --component=externalcontent --name=xapiusername --set=4j09hapVift36ONxYbLDZkRH
+call %BASEDIR%\bin\moodle-docker-compose exec webserver php admin/cli/cfg.php --component=externalcontent --name=xapipassword --set=E3dyJMh4xqw9B8u7eikmCKWX
+echo.
+echo *** Run the Moodle CLI script: admin/cli/cfg.php to show the xapi credentials
+echo.
+call %BASEDIR%\bin\moodle-docker-compose exec webserver php admin/cli/cfg.php --component=externalcontent
+echo.
+
+echo.
 echo *** Moodle is running please. Browse to - http://%MOODLE_DOCKER_WEB_PORT%
 echo *** Moodle Admin Username: admin
 echo *** Moodle Admin password: test
