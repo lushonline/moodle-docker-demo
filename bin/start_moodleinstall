@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+export MOODLE_VERSION=${MOODLE_VERSION:-MOODLE_311_STABLE}
+export MOODLE_DOCKER_DB=${MOODLE_DOCKER_DB:-pgsql}
+export MOODLE_DOCKER_PHP_VERSION=${MOODLE_DOCKER_PHP_VERSION:-7.4}
+
+# Nasty portable way to the directory of this script, following symlink,
+# because readlink -f not on OSX. Thanks stack overflow..
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
+  DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+  SOURCE="$(readlink "$SOURCE")"
+  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+done
+basedir="$( cd -P "$( dirname "$SOURCE" )/../" && pwd )"
+
+export MOODLE_DOCKER_WWWROOT="${basedir}/assets/moodle_${MOODLE_VERSION}"
+export MOODLE_DOCKER_MOODLEDATA="${basedir}/assets/moodledata_${MOODLE_VERSION}"
+export MOODLE_DOCKER_MODULES="${basedir}/assets/moodle_modules"
+
+# Start up containers
+bin/moodle-docker-compose up -d
+
+echo "Get Webserver Container ID"
+docker container ls -aqf name=webserver > containerid.txt
+while read line; do export "containerid=${line}";
+done < containerid.txt
+
+echo "Copy extra PHP configuration to webserver"
+docker cp "${basedir}/docker-php-limits.ini" "${containerid}:/usr/local/etc/php/conf.d/docker-php-limits.ini"
+
+echo "Restart Apache"
+bin/moodle-docker-compose exec webserver bash -c "/etc/init.d/apache2 reload"
+
+echo "Run the Moodle CLI script: admin/cli/install_database.php"
+#bin/moodle-docker-compose exec webserver php admin/cli/install_database.php --agree-license --fullname="Docker moodle" --shortname="docker_moodle" --adminpass="test" --adminemail="admin@example.com"
+
+echo "Run the Moodle CLI script: admin/cli/cfg.php to configure the xapi credentials"
+bin/moodle-docker-compose exec webserver php admin/cli/cfg.php --component=externalcontent --name=xapiusername --set=4j09hapVift36ONxYbLDZkRH
+bin/moodle-docker-compose exec webserver php admin/cli/cfg.php --component=externalcontent --name=xapipassword --set=E3dyJMh4xqw9B8u7eikmCKWX
+
+echo "Run the Moodle CLI script: admin/cli/cfg.php to show the xapi credentials"
+bin/moodle-docker-compose exec webserver php admin/cli/cfg.php --component=externalcontent
+
+echo "Moodle is running please. Browse to - http://${MOODLE_DOCKER_WEB_HOST}:${MOODLE_DOCKER_WEB_PORT}"
+echo "Moodle Admin Username: admin"
+echo "Moodle Admin password: test"

@@ -27,12 +27,15 @@ services:
       - "8025:8025"
   webserver:
     image: "moodlehq/moodle-php-apache:${MOODLE_DOCKER_PHP_VERSION}"
+    # The UID:GID that owns the moodle folders
+    # Only needed for LINUX/WSL2
+    user: ${MOODLE_UID}:${MOODLE_GID}
     depends_on:
       - db
       - mailhog
     volumes:
-      - "${MOODLE_DOCKER_WWWROOT}:/var/www/html"
-      - "${MOODLE_DOCKER_MOODLEDATA}:/var/www/moodledata"
+      - "${MOODLE_DOCKER_WWWROOT}:/var/www/html:rw"
+      - "${MOODLE_DOCKER_MOODLEDATA}:/var/www/moodledata:rw"
       - "${ASSETDIR}/web/apache2_faildumps.conf:/etc/apache2/conf-enabled/apache2_faildumps.conf"
       - "${ASSETDIR}/web/apache2_mailhog.conf:/etc/apache2/conf-enabled/apache2_mailhog.conf"
     environment:

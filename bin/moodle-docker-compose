@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+set -e
+
+if [ ! -d "$MOODLE_DOCKER_WWWROOT" ];
+then
+    echo 'Error: $MOODLE_DOCKER_WWWROOT is not set or not an existing directory'
+    exit 1
+fi
+
+export MOODLE_VERSION=${MOODLE_VERSION:-MOODLE_311_STABLE}
+export MOODLE_UID="$(id -u)"
+export MOODLE_GID="$(id -g)"
+
+# Nasty portable way to the directory of this script, following symlink,
+# because readlink -f not on OSX. Thanks stack overflow..
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
+  DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+  SOURCE="$(readlink "$SOURCE")"
+  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+done
+basedir="$( cd -P "$( dirname "$SOURCE" )/../" && pwd )"
+export ASSETDIR="${basedir}/assets"
+
+dockercompose="docker-compose --project-name ${MOODLE_VERSION} -f ${basedir}/base.yml"
+
+# PHP Version.
+export MOODLE_DOCKER_PHP_VERSION=${MOODLE_DOCKER_PHP_VERSION:-7.4}
+
+# Webserver host
+export MOODLE_DOCKER_WEB_HOST=${MOODLE_DOCKER_WEB_HOST:-localhost}
+
+# Webserver port
+export MOODLE_DOCKER_WEB_PORT=${MOODLE_DOCKER_WEB_PORT:-8000}
+if [[ $MOODLE_DOCKER_WEB_PORT == *":"* ]] || [[ $MOODLE_DOCKER_WEB_PORT -gt 0 ]]
+then
+    # If no bind ip has been configured (bind_ip:port), default to 127.0.0.1
+    if [[ ! $MOODLE_DOCKER_WEB_PORT == *":"* ]]
+    then
+        MOODLE_DOCKER_WEB_PORT=127.0.0.1:$MOODLE_DOCKER_WEB_PORT
+    fi
+    dockercompose="${dockercompose} -f ${basedir}/webserver.port.yml"
+fi
+
+# Mac OS Compatbility
+if [[ "$(uname)" == "Darwin" ]]; then
+    # Support https://docs.docker.com/docker-for-mac/osxfs-caching/
+    dockercompose="${dockercompose} -f ${basedir}/volumes-cached.yml"
+fi
+
+$dockercompose "$@"

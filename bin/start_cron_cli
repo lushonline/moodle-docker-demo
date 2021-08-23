@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+export MOODLE_VERSION=${MOODLE_VERSION:-MOODLE_311_STABLE}
+export MOODLE_DOCKER_DB=${MOODLE_DOCKER_DB:-pgsql}
+export MOODLE_DOCKER_PHP_VERSION=${MOODLE_DOCKER_PHP_VERSION:-7.4}
+
+# Nasty portable way to the directory of this script, following symlink,
+# because readlink -f not on OSX. Thanks stack overflow..
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
+  DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+  SOURCE="$(readlink "$SOURCE")"
+  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+done
+basedir="$( cd -P "$( dirname "$SOURCE" )/../" && pwd )"
+
+export MOODLE_DOCKER_WWWROOT="${basedir}/assets/moodle_${MOODLE_VERSION}"
+export MOODLE_DOCKER_MOODLEDATA="${basedir}/assets/moodledata_${MOODLE_VERSION}"
+export MOODLE_DOCKER_MODULES="${basedir}/assets/moodle_modules"
+
+echo "Run the Moodle CLI script: admin/cli/cron.php"
+bin/moodle-docker-compose exec webserver php admin/cli/cron.php

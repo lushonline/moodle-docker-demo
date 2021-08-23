@@ -1,20 +1,37 @@
 @ECHO OFF
+IF "%1"=="" (
+  IF "%MOODLE_VERSION%"=="" (
+    SET "MOODLE_VERSION=MOODLE_311_STABLE"
+  )
+) ELSE (
+  SET "MOODLE_VERSION=%1"
+)
+SET MOODLE_DOCKER_DB=pgsql
+SET MOODLE_DOCKER_PHP_VERSION=7.4
 
 echo.
 echo **************************************************
 echo *** Running: %~n0%~x0
+echo *** Parameters: %*
+echo.
+echo *** Moodle Version: %MOODLE_VERSION%
+echo *** Moodle DB: %MOODLE_DOCKER_DB%
+echo *** Moodle PHP: %MOODLE_DOCKER_PHP_VERSION%
 echo.
 
 PUSHD %cd%
 CD %~dp0..
 SET BASEDIR=%cd%
 POPD
+SET MOODLE_DOCKER_WWWROOT=%BASEDIR%\assets\moodle_%MOODLE_VERSION%
+SET MOODLE_DOCKER_MOODLEDATA=%BASEDIR%\assets\moodledata_%MOODLE_VERSION%
+SET MOODLE_DOCKER_MODULES=%BASEDIR%\assets\moodle_modules
 
-START ngrok http http://127.0.0.1:8000
+START ngrok http --config .\ngrok.yml http://127.0.0.1:8000
 
-TIMEOUT /T 10 /NOBREAK
+TIMEOUT /T 5 /NOBREAK
 
-For /F "Delims=" %%A In ('"curl -s http://localhost:4040/api/tunnels/command_line | jq-win64 .public_url"') Do Set "MOODLE_DOCKER_NGROK_HOST=%%~A"
+For /F "Delims=" %%A In ('"curl -s http://localhost:4545/api/tunnels/command_line | jq-win64 .public_url"') Do Set "MOODLE_DOCKER_NGROK_HOST=%%~A"
 
 IF NOT "%MOODLE_DOCKER_NGROK_HOST%"=="" (
     echo.

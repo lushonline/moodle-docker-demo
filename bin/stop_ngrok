@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+export MOODLE_VERSION=${MOODLE_VERSION:-MOODLE_311_STABLE}
+export MOODLE_DOCKER_DB=${MOODLE_DOCKER_DB:-pgsql}
+export MOODLE_DOCKER_PHP_VERSION=${MOODLE_DOCKER_PHP_VERSION:-7.4}
+# Webserver host
+export MOODLE_DOCKER_WEB_HOST=${MOODLE_DOCKER_WEB_HOST:-localhost}
+
+# Webserver port
+export MOODLE_DOCKER_WEB_PORT=${MOODLE_DOCKER_WEB_PORT:-8000}
+
+# Nasty portable way to the directory of this script, following symlink,
+# because readlink -f not on OSX. Thanks stack overflow..
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
+  DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+  SOURCE="$(readlink "$SOURCE")"
+  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+done
+basedir="$( cd -P "$( dirname "$SOURCE" )/../" && pwd )"
+
+export MOODLE_DOCKER_WWWROOT="${basedir}/assets/moodle_${MOODLE_VERSION}"
+export MOODLE_DOCKER_MOODLEDATA="${basedir}/assets/moodledata_${MOODLE_VERSION}"
+export MOODLE_DOCKER_MODULES="${basedir}/assets/moodle_modules"
+
+echo "Killing any previous ngrok instances"
+pkill -f ${basedir}/ngrok
+
+echo "Waiting for 2 seconds before restartin containers"
+sleep 2s
+export MOODLE_DOCKER_NGROK_HOST
+
+echo "Bring Docker Containers Down"
+bin/moodle-docker-compose down
+echo "Bring Docker Containers Up"
+bin/moodle-docker-compose up -d
+echo "Moodle is running please. Browse to - http://${MOODLE_DOCKER_WEB_HOST}:${MOODLE_DOCKER_WEB_PORT}"
+echo "Moodle Admin Username: admin"
+echo "Moodle Admin password: test"
+
+
+
+
+
