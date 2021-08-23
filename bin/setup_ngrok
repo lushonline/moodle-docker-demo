@@ -1,4 +1,16 @@
 #!/usr/bin/env bash
+which jq > /dev/null 2>&1
+if [ $? != 0 ]; then
+echo 'jq must be installed.'
+exit 1
+fi
+
+if ! command -v ./ngrok &> /dev/null
+then
+    echo "ngrok could not be found. Please install in root of project."
+    exit 1
+fi
+
 export MOODLE_VERSION=${MOODLE_VERSION:-MOODLE_311_STABLE}
 export MOODLE_DOCKER_DB=${MOODLE_DOCKER_DB:-pgsql}
 export MOODLE_DOCKER_PHP_VERSION=${MOODLE_DOCKER_PHP_VERSION:-7.4}
