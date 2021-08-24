@@ -1,4 +1,12 @@
 #!/usr/bin/env bash
+# .env loading in the shell
+dotenv () {
+  set -a
+  [ -f .env ] && . .env
+  set +a
+}
+dotenv
+
 set -e
 
 if [ ! -d "$MOODLE_DOCKER_WWWROOT" ];
