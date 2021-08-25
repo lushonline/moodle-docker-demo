@@ -1,78 +1,75 @@
 @ECHO OFF
-IF "%1"=="" (
-  IF "%MOODLE_VERSION%"=="" (
-    SET "MOODLE_VERSION=MOODLE_311_STABLE"
-  )
-) ELSE (
-  SET "MOODLE_VERSION=%1"
-)
-SET MOODLE_DOCKER_DB=pgsql
-SET MOODLE_DOCKER_PHP_VERSION=7.4
+setlocal
+PUSHD %cd%
+CD %~dp0..
+SET BASEDIR=%cd%
+POPD
 
 echo.
 echo **************************************************
 echo *** Running: %~n0%~x0
 echo *** Parameters: %*
 echo.
-echo *** Moodle Version: %MOODLE_VERSION%
-echo *** Moodle DB: %MOODLE_DOCKER_DB%
-echo *** Moodle PHP: %MOODLE_DOCKER_PHP_VERSION%
-echo.
 
-PUSHD %cd%
-CD %~dp0..
-SET BASEDIR=%cd%
-POPD
-SET MOODLE_DOCKER_WWWROOT=%BASEDIR%\assets\moodle_%MOODLE_VERSION%
-SET MOODLE_DOCKER_MOODLEDATA=%BASEDIR%\assets\moodledata_%MOODLE_VERSION%
-SET MOODLE_DOCKER_MODULES=%BASEDIR%\assets\moodle_modules
+IF "%MOODLE_VERSION%"=="" (
+    echo **************************************************
+    echo *** Setting Environment Variables from .env
+    echo.
+    FOR /F "tokens=*" %%i in ('type %BASEDIR%\.env') do SET %%i
+    echo.
+    echo **************************************************
+    echo.
+)
+
+echo *** Moodle Version: %MOODLE_VERSION%
+echo.
 
 SET NUL=NUL
 IF "%OS%"=="Windows_NT" SET NUL=
 
-IF EXIST %MOODLE_DOCKER_MOODLEDATA%\%NUL% GOTO MOODLEMODULESEXISTS
-MD %MOODLE_DOCKER_MOODLEDATA%
+IF EXIST "%BASEDIR%\%MOODLE_DOCKER_MOODLEDATA%\%NUL%" GOTO MOODLEMODULESEXISTS
+MD %BASEDIR%\%MOODLE_DOCKER_MOODLEDATA%
 
 :MOODLEMODULESEXISTS
-IF EXIST %MOODLE_DOCKER_MODULES%\%NUL% GOTO MOODLEDATAEXISTS
-MD %MOODLE_DOCKER_MODULES%
+IF EXIST "%BASEDIR%\%MOODLE_DOCKER_MODULES%\%NUL%" GOTO MOODLEDATAEXISTS
+MD %BASEDIR%\%MOODLE_DOCKER_MODULES%
 
 :MOODLEDATAEXISTS
-IF EXIST %MOODLE_DOCKER_WWWROOT%\%NUL% GOTO FETCHMOODLE
+IF EXIST %BASEDIR%\%MOODLE_DOCKER_WWWROOT%\%NUL% GOTO FETCHMOODLE
 
 :CLONE
 echo.
 echo *** Cloning Moodle branch: %MOODLE_VERSION%
 echo.
-git clone --branch %MOODLE_VERSION% --depth 1 --single-branch git://github.com/moodle/moodle %MOODLE_DOCKER_WWWROOT%
+call git clone --branch %MOODLE_VERSION% --depth 1 --single-branch git://github.com/moodle/moodle %BASEDIR%\%MOODLE_DOCKER_WWWROOT%
 echo.
 GOTO FINISH
 
 :FETCHMOODLE
 PUSHD %cd%
-CD %MOODLE_DOCKER_WWWROOT%
+CD %BASEDIR%\%MOODLE_DOCKER_WWWROOT%
 echo.
 echo *** Remove all uncommited local files in %MOODLE_DOCKER_WWWROOT%
 echo.
-git clean -df
-git clean -df
-git clean -df
+call git clean -df
+call git clean -df
+call git clean -df
 echo.
 echo *** Reset in %MOODLE_DOCKER_WWWROOT%
 echo.
-git reset --hard
+call git reset --hard
 echo.
 echo *** Fetch any updates from branch %MOODLE_VERSION%
 echo.
-git fetch --all
+call git fetch --all
 echo.
 echo *** Pull from branch %MOODLE_VERSION%
 echo.
-git pull
+call git pull
 echo.
 echo *** Show Git Status
 echo.
-git status
+call git status
 echo.
 POPD
 
@@ -80,13 +77,14 @@ POPD
 echo.
 echo *** Ensure customized config.php for the Docker containers is in place
 echo.
-copy config.docker-template.php %MOODLE_DOCKER_WWWROOT%\config.php
+copy  "%BASEDIR%\config.docker-template.php" "%MOODLE_DOCKER_WWWROOT%\config.php"
 echo.
+pause
 
 echo.
 echo *** Ensure moodle files from %BASEDIR%\assets\moodle_files\ are installed
 echo.
-XCOPY %BASEDIR%\assets\moodle_files\* %MOODLE_DOCKER_WWWROOT%\ /s /i /y
+XCOPY "%BASEDIR%\assets\moodle_files\*" "%MOODLE_DOCKER_WWWROOT%\" /s /i /y
 echo.
 
 echo.
@@ -95,11 +93,11 @@ echo.
 PUSHD %cd%
 
 :CLONEUPLOADPAGE
-IF EXIST %BASEDIR%\assets\moodle_modules\admin\tool\uploadpage\%NUL% GOTO FETCHUPLOADPAGE
+IF EXIST %BASEDIR%\%MOODLE_DOCKER_MODULES%\admin\tool\uploadpage\%NUL% GOTO FETCHUPLOADPAGE
 echo.
 echo *** Cloning moodle-tool_uploadpage
 echo.
-git clone git://github.com/lushonline/moodle-tool_uploadpage %BASEDIR%\assets\moodle_modules\admin\tool\uploadpage\
+call git clone git://github.com/lushonline/moodle-tool_uploadpage "%BASEDIR%\%MOODLE_DOCKER_MODULES%\admin\tool\uploadpage\"
 echo.
 GOTO CLONEUPLOADPAGERESULTS
 
@@ -107,17 +105,17 @@ GOTO CLONEUPLOADPAGERESULTS
 echo Updating moodle-tool_uploadpage
 echo.
 echo Fetch https://github.com/lushonline/moodle-tool_uploadpage
-CD %BASEDIR%\assets\moodle_modules\admin\tool\uploadpage
-git fetch --all
-git status
+CD "%BASEDIR%\%MOODLE_DOCKER_MODULES%\admin\tool\uploadpage"
+call git fetch --all
+call git status
 echo.
 
 :CLONEUPLOADPAGERESULTS
-IF EXIST %BASEDIR%\assets\moodle_modules\admin\tool\uploadpageresults\%NUL% GOTO FETCHUPLOADPAGERESULTS
+IF EXIST %BASEDIR%\%MOODLE_DOCKER_MODULES%\admin\tool\uploadpageresults\%NUL% GOTO FETCHUPLOADPAGERESULTS
 echo.
 echo *** Cloning moodle-tool_uploadpageresults
 echo.
-git clone git://github.com/lushonline/moodle-tool_uploadpageresults %BASEDIR%\assets\moodle_modules\admin\tool\uploadpageresults\
+call git clone git://github.com/lushonline/moodle-tool_uploadpageresults "%BASEDIR%\%MOODLE_DOCKER_MODULES%\admin\tool\uploadpageresults\"
 echo.
 GOTO CLONEUPLOADEXTERNALCONTENT
 
@@ -125,17 +123,18 @@ GOTO CLONEUPLOADEXTERNALCONTENT
 echo Updating moodle-tool_uploadpageresults
 echo.
 echo Fetch https://github.com/lushonline/moodle-tool_uploadpageresults
-CD %BASEDIR%\assets\moodle_modules\admin\tool\uploadpageresults
-git fetch --all
-git status
+CD "%BASEDIR%\%MOODLE_DOCKER_MODULES%\admin\tool\uploadpageresults"
+call git fetch --all
+call git status
+CD %cd%
 echo.
 
 :CLONEUPLOADEXTERNALCONTENT
-IF EXIST %BASEDIR%\assets\moodle_modules\admin\tool\uploadexternalcontent\%NUL% GOTO FETCHUPLOADEXTERNALCONTENT
+IF EXIST %BASEDIR%\%MOODLE_DOCKER_MODULES%\admin\tool\uploadexternalcontent\%NUL% GOTO FETCHUPLOADEXTERNALCONTENT
 echo.
 echo *** Cloning moodle-tool_uploadexternalcontent
 echo.
-git clone git://github.com/lushonline/moodle-tool_uploadexternalcontent %BASEDIR%\assets\moodle_modules\admin\tool\uploadexternalcontent\
+call git clone git://github.com/lushonline/moodle-tool_uploadexternalcontent "%BASEDIR%\%MOODLE_DOCKER_MODULES%\admin\tool\uploadexternalcontent\"
 echo.
 GOTO CLONEUPLOADEXTERNALCONTENTRESULTS
 
@@ -143,18 +142,19 @@ GOTO CLONEUPLOADEXTERNALCONTENTRESULTS
 echo Updating moodle-tool_uploadexternalcontent
 echo.
 echo Fetch https://github.com/lushonline/moodle-tool_uploadexternalcontent
-CD %BASEDIR%\assets\moodle_modules\admin\tool\uploadexternalcontent
-git fetch --all
-git status
+CD "%BASEDIR%\%MOODLE_DOCKER_MODULES%\admin\tool\uploadexternalcontent"
+call git fetch --all
+call git status
+CD %cd%
 echo.
 echo.
 
 :CLONEUPLOADEXTERNALCONTENTRESULTS
-IF EXIST %BASEDIR%\assets\moodle_modules\admin\tool\uploadexternalcontentresults\%NUL% GOTO FETCHUPLOADEXTERNALCONTENTRESULTS
+IF EXIST %BASEDIR%\%MOODLE_DOCKER_MODULES%\admin\tool\uploadexternalcontentresults\%NUL% GOTO FETCHUPLOADEXTERNALCONTENTRESULTS
 echo.
 echo *** Cloning moodle-tool_uploadexternalcontentresults
 echo.
-git clone git://github.com/lushonline/moodle-tool_uploadexternalcontentresults %BASEDIR%\assets\moodle_modules\admin\tool\uploadexternalcontentresults\
+call git clone git://github.com/lushonline/moodle-tool_uploadexternalcontentresults "%BASEDIR%\%MOODLE_DOCKER_MODULES%\admin\tool\uploadexternalcontentresults\"
 echo.
 GOTO CLONEEXTERNALCONTENT
 
@@ -162,18 +162,19 @@ GOTO CLONEEXTERNALCONTENT
 echo Updating moodle-tool_uploadexternalcontentresults
 echo.
 echo Fetch https://github.com/lushonline/moodle-tool_uploadexternalcontentresults
-CD %BASEDIR%\assets\moodle_modules\admin\tool\uploadexternalcontentresults
-git fetch --all
-git status
+CD "%BASEDIR%\%MOODLE_DOCKER_MODULES%\admin\tool\uploadexternalcontentresults"
+call git fetch --all
+call git status
+CD %cd%
 echo.
 echo.
 
 :CLONEEXTERNALCONTENT
-IF EXIST %BASEDIR%\assets\moodle_modules\mod\externalcontent\%NUL% GOTO FETCHEXTERNALCONTENT
+IF EXIST %BASEDIR%\%MOODLE_DOCKER_MODULES%\mod\externalcontent\%NUL% GOTO FETCHEXTERNALCONTENT
 echo.
 echo *** Cloning moodle-mod_externalcontent
 echo.
-git clone git://github.com/lushonline/moodle-mod_externalcontent %BASEDIR%\assets\moodle_modules\mod\externalcontent
+call git clone git://github.com/lushonline/moodle-mod_externalcontent "%BASEDIR%\%MOODLE_DOCKER_MODULES%\mod\externalcontent"
 echo.
 GOTO FINISHMODULES
 
@@ -181,22 +182,24 @@ GOTO FINISHMODULES
 echo Updating moodle-mod_externalcontent
 echo.
 echo Fetch https://github.com/lushonline/moodle-mod_externalcontent
-CD %BASEDIR%\assets\moodle_modules\mod\externalcontent
-git fetch --all
-git status
+CD "%BASEDIR%\%MOODLE_DOCKER_MODULES%\mod\externalcontent"
+call git fetch --all
+call git status
+CD %cd%
 echo.
 echo.
 
 :FINISHMODULES
 POPD
 echo.
-echo *** Ensure moodle modules from %BASEDIR%\assets\moodle_modules\ are installed
+echo *** Ensure moodle modules from %BASEDIR%\%MOODLE_DOCKER_MODULES% are installed
 echo.
-XCOPY %BASEDIR%\assets\moodle_modules\* %MOODLE_DOCKER_WWWROOT%\ /s /i /y
+XCOPY "%BASEDIR%\%MOODLE_DOCKER_MODULES%\*" "%MOODLE_DOCKER_WWWROOT%\" /s /i /y
 echo.
 
 echo.
-echo *** Start the MOODLE CommandLine Installer %BASEDIR%\bin\start_moodleinstall.cmd
+echo *** Start the MOODLE CommandLine Installer bin\start_moodleinstall.cmd
 echo.
-call %BASEDIR%\bin\start_moodleinstall.cmd %MOODLE_VERSION%
+call bin\start_moodleinstall.cmd %MOODLE_VERSION%
 echo.
+endlocal
