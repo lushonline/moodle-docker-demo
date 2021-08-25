@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+# ---
+# Add your own commands, functions, and variables here.  Define defaults first,
+# then `dk use:` the desired devkit modules, and then define any overrides to
+# the devkit defaults.
+# ---
+
+# Available modules (uncomment to use):
+
+dk use: cram              # run tests using the "cram" functional test tool
+dk use: entr-watch        # watch files and re-run tests or other commands
+dk use: shell-console     # make the "console" command enter a subshell
+dk use: bash-kit          # enable doing tests/console/etc. in bash3.2 w/docker
+dk use: shellcheck        # support running shellcheck (via docker if not installed)
+
+# Define overrides, new commands, functions, etc. here:
+
+# SC2128 = array/string mixing
+# SC2145 = prefix or suffix on "$@" or other array
+# SC2178 = array/string mixing
+SHELLCHECK_OPTS='-e SC2128,SC2145,SC2178'
+
+# Define overrides, new commands, functions, etc. here:
+
+event off "cram_files" cram.files      # skip default files
+event on  "cram_files" echo README.md  # just test README
+
+on     "test" dk shellcheck dotenv
+
+
+build-dotenv() {
+	mdsh --out "$1" --compile dotenv-cli.md && chmod +x "$1"
+}
+
+before test  build-dotenv "$BASHER_INSTALL_BIN"/dotenv
+on     build build-dotenv dotenv

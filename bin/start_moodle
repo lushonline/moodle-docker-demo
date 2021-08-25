@@ -1,36 +1,15 @@
 #!/usr/bin/env bash
-# .env loading in the shell
-dotenv () {
-  set -a
-  [ -f .env ] && . .env
-  set +a
-}
-dotenv
+set -e
+source "$(dirname "$0")/dotenv"
+source "$(dirname "$0")/basedir"
 
-export MOODLE_VERSION=${MOODLE_VERSION:-MOODLE_311_STABLE}
-export MOODLE_DOCKER_DB=${MOODLE_DOCKER_DB:-pgsql}
-export MOODLE_DOCKER_PHP_VERSION=${MOODLE_DOCKER_PHP_VERSION:-7.4}
-# Webserver host
-export MOODLE_DOCKER_WEB_HOST=${MOODLE_DOCKER_WEB_HOST:-localhost}
+basedir=$(basedir)
 
-# Webserver port
-export MOODLE_DOCKER_WEB_PORT=${MOODLE_DOCKER_WEB_PORT:-8000}
+if [ ! -n "$MOODLE_VERSION" ];
+then
+  .env export
+fi
 
-# Nasty portable way to the directory of this script, following symlink,
-# because readlink -f not on OSX. Thanks stack overflow..
-SOURCE="${BASH_SOURCE[0]}"
-while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
-  DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
-  SOURCE="$(readlink "$SOURCE")"
-  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
-done
-basedir="$( cd -P "$( dirname "$SOURCE" )/../" && pwd )"
-
-export MOODLE_DOCKER_WWWROOT=${MOODLE_DOCKER_WWWROOT:-"${basedir}/assets/moodle_${MOODLE_VERSION}"}
-export MOODLE_DOCKER_MOODLEDATA=${MOODLE_DOCKER_MOODLEDATA:-"${basedir}/assets/moodledata_${MOODLE_VERSION}"}
-export MOODLE_DOCKER_MODULES=${MOODLE_DOCKER_MODULES:-"${basedir}/assets/moodle_modules"}
-
-# Start up containers
 bin/moodle-docker-compose up -d
 
 echo "Moodle is running please. Browse to - http://${MOODLE_DOCKER_WEB_HOST}:${MOODLE_DOCKER_WEB_PORT}"
