@@ -1,9 +1,28 @@
 @ECHO OFF
+setlocal
+PUSHD %cd%
+CD %~dp0..
+SET BASEDIR=%cd%
+POPD
+SET ASSETDIR=%BASEDIR%\assets
+SET MOODLE_DOCKER_ASSETDIR=%ASSETDIR%
+
 echo.
 echo **************************************************
 echo *** Running: %~n0%~x0
 echo *** Parameters: %*
 echo.
+
+IF "%MOODLE_VERSION%"=="" (
+    echo **************************************************
+    echo *** Setting Environment Variables from .env
+    echo.
+    FOR /F "tokens=*" %%i in ('type %BASEDIR%\.env') do SET %%i
+    echo.
+    echo **************************************************
+    echo.
+)
+
 echo *** Moodle Version: %MOODLE_VERSION%
 echo.
 
@@ -12,12 +31,7 @@ IF NOT EXIST "%MOODLE_DOCKER_WWWROOT%" (
     EXIT /B 1
 )
 
-PUSHD %cd%
-CD %~dp0..
-SET BASEDIR=%cd%
-POPD
-SET ASSETDIR=%BASEDIR%\assets
-SET MOODLE_DOCKER_ASSETDIR=%ASSETDIR%
+
 
 SET COMPOSE_CONVERT_WINDOWS_PATHS=true
 
@@ -46,3 +60,4 @@ IF DEFINED TRUE (
 )
 
 %DOCKERCOMPOSE% %*
+endlocal

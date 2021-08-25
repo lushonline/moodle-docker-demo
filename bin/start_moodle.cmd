@@ -1,40 +1,37 @@
 @ECHO OFF
-IF "%1"=="" (
-  IF "%MOODLE_VERSION%"=="" (
-    SET "MOODLE_VERSION=MOODLE_311_STABLE"
-  )
-) ELSE (
-  SET "MOODLE_VERSION=%1"
-)
-SET MOODLE_DOCKER_DB=pgsql
-SET MOODLE_DOCKER_PHP_VERSION=7.4
+setlocal
+PUSHD %cd%
+CD %~dp0..
+SET BASEDIR=%cd%
+POPD
 
 echo.
 echo **************************************************
 echo *** Running: %~n0%~x0
 echo *** Parameters: %*
 echo.
-echo *** Moodle Version: %MOODLE_VERSION%
-echo *** Moodle DB: %MOODLE_DOCKER_DB%
-echo *** Moodle PHP: %MOODLE_DOCKER_PHP_VERSION%
-echo.
 
-PUSHD %cd%
-CD %~dp0..
-SET BASEDIR=%cd%
-POPD
-SET MOODLE_DOCKER_WWWROOT=%BASEDIR%\assets\moodle_%MOODLE_VERSION%
-SET MOODLE_DOCKER_MOODLEDATA=%BASEDIR%\assets\moodledata_%MOODLE_VERSION%
-SET MOODLE_DOCKER_MODULES=%BASEDIR%\assets\moodle_modules
+IF "%MOODLE_VERSION%"=="" (
+    echo **************************************************
+    echo *** Setting Environment Variables from .env
+    echo.
+    FOR /F "tokens=*" %%i in ('type %BASEDIR%\.env') do SET %%i
+    echo.
+    echo **************************************************
+    echo.
+)
+
+echo *** Moodle Version: %MOODLE_VERSION%
+echo.
 
 echo.
 echo *** Bring up the Docker containers
 echo.
-call %BASEDIR%\bin\moodle-docker-compose up -d
+call bin\moodle-docker-compose up -d
 echo.
 
 echo.
-echo *** Moodle is running please. Browse to - http://127.0.0.1:8000
+echo *** Moodle is running please. Browse to - http://%MOODLE_DOCKER_WEB_HOST%:%MOODLE_DOCKER_WEB_PORT%
 
 IF NOT "%MOODLE_DOCKER_NGROK_HOST%"=="" (
     echo *** Moodle is available via NGROK. Browse to - %MOODLE_DOCKER_NGROK_HOST%
@@ -43,3 +40,4 @@ IF NOT "%MOODLE_DOCKER_NGROK_HOST%"=="" (
 echo *** Moodle Admin Username: admin
 echo *** Moodle Admin password: test
 echo.
+endlocal

@@ -1,31 +1,28 @@
 @ECHO OFF
-IF "%1"=="" (
-  IF "%MOODLE_VERSION%"=="" (
-    SET "MOODLE_VERSION=MOODLE_311_STABLE"
-  )
-) ELSE (
-  SET "MOODLE_VERSION=%1"
-)
-SET MOODLE_DOCKER_DB=pgsql
-SET MOODLE_DOCKER_PHP_VERSION=7.4
+setlocal
+PUSHD %cd%
+CD %~dp0..
+SET BASEDIR=%cd%
+POPD
 
 echo.
 echo **************************************************
 echo *** Running: %~n0%~x0
 echo *** Parameters: %*
 echo.
-echo *** Moodle Version: %MOODLE_VERSION%
-echo *** Moodle DB: %MOODLE_DOCKER_DB%
-echo *** Moodle PHP: %MOODLE_DOCKER_PHP_VERSION%
-echo.
 
-PUSHD %cd%
-CD %~dp0..
-SET BASEDIR=%cd%
-POPD
-SET MOODLE_DOCKER_WWWROOT=%BASEDIR%\assets\moodle_%MOODLE_VERSION%
-SET MOODLE_DOCKER_MOODLEDATA=%BASEDIR%\assets\moodledata_%MOODLE_VERSION%
-SET MOODLE_DOCKER_MODULES=%BASEDIR%\assets\moodle_modules
+IF "%MOODLE_VERSION%"=="" (
+    echo **************************************************
+    echo *** Setting Environment Variables from .env
+    echo.
+    FOR /F "tokens=*" %%i in ('type %BASEDIR%\.env') do SET %%i
+    echo.
+    echo **************************************************
+    echo.
+)
+
+echo *** Moodle Version: %MOODLE_VERSION%
+echo.
 
 START ngrok http --config .\ngrok.yml http://127.0.0.1:8000
 
@@ -37,11 +34,11 @@ IF NOT "%MOODLE_DOCKER_NGROK_HOST%"=="" (
     echo.
     echo ***Bring Docker Containers Down
     echo.
-    call %BASEDIR%\bin\moodle-docker-compose down
+    call bin\moodle-docker-compose down
     echo.
     echo ***Bring Docker Containers Up
     echo.
-    call %BASEDIR%\bin\moodle-docker-compose up -d
+    call bin\moodle-docker-compose up -d
     echo.
     echo.
     echo *** Moodle is available via NGROK. Browse to - %MOODLE_DOCKER_NGROK_HOST%
@@ -57,3 +54,4 @@ echo.
 echo *** There was a problem setting up NGROK
 
 :FINISH
+endlocal
