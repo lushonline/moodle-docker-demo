@@ -169,5 +169,5 @@ Run  [Upload External Content Results](https://moodle.org/plugins/tool_uploadext
 It uses the [uploadexternalcontentresults.csv](assets/moodle_files/uploadexternalcontentresults.csv) which was copied to the web root on the Moodle server
 
 ```bash
-bin/start_uploadexternalcontentresults_cli.cmd
+bin/start_uploadexternalcontentresults_cli
 ```
