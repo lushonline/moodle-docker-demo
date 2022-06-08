@@ -30,7 +30,7 @@ if [ ! -d "$MOODLE_DOCKER_WWWROOT" ];
 then
     echo
     echo "*** $MOODLE_DOCKER_WWWROOT does not exist, cloning"
-    git clone --branch $MOODLE_VERSION --depth 1 --single-branch git://github.com/moodle/moodle $MOODLE_DOCKER_WWWROOT
+    git clone --branch $MOODLE_VERSION --depth 1 --single-branch https://github.com/moodle/moodle $MOODLE_DOCKER_WWWROOT
 else
     echo
     echo "*** $MOODLE_DOCKER_WWWROOT exists, updating"
@@ -61,7 +61,7 @@ then
     echo
     echo "*** Cloning moodle-tool_uploadpage"
     echo "*** $MOODLE_DOCKER_MODULES/admin/tool/uploadpage does not exist, cloning"
-    git clone git://github.com/lushonline/moodle-tool_uploadpage $MOODLE_DOCKER_MODULES/admin/tool/uploadpage
+    git clone https://github.com/lushonline/moodle-tool_uploadpage $MOODLE_DOCKER_MODULES/admin/tool/uploadpage
 else
     echo
     echo "*** Updating moodle-tool_uploadpage"
@@ -82,7 +82,7 @@ then
     echo
     echo "*** Cloning moodle-tool_uploadpageresults"
     echo "*** $MOODLE_DOCKER_MODULES/admin/tool/uploadpageresults does not exist, cloning"
-    git clone git://github.com/lushonline/moodle-tool_uploadpageresults $MOODLE_DOCKER_MODULES/admin/tool/uploadpageresults
+    git clone https://github.com/lushonline/moodle-tool_uploadpageresults $MOODLE_DOCKER_MODULES/admin/tool/uploadpageresults
 else
     echo
     echo "*** Updating moodle-tool_uploadpageresults"
@@ -103,7 +103,7 @@ then
     echo
     echo "*** Cloning moodle-tool_uploadexternalcontent"
     echo "*** $MOODLE_DOCKER_MODULES/admin/tool/uploadexternalcontent does not exist, cloning"
-    git clone git://github.com/lushonline/moodle-tool_uploadexternalcontent $MOODLE_DOCKER_MODULES/admin/tool/uploadexternalcontent
+    git clone https://github.com/lushonline/moodle-tool_uploadexternalcontent $MOODLE_DOCKER_MODULES/admin/tool/uploadexternalcontent
 else
     echo
     echo "*** Updating moodle-tool_uploadexternalcontent"
@@ -124,7 +124,7 @@ then
     echo
     echo "*** Cloning moodle-tool_uploadexternalcontentresults"
     echo "*** $MOODLE_DOCKER_MODULES/admin/tool/uploadexternalcontentresults does not exist, cloning"
-    git clone git://github.com/lushonline/moodle-tool_uploadexternalcontentresults $MOODLE_DOCKER_MODULES/admin/tool/uploadexternalcontentresults
+    git clone https://github.com/lushonline/moodle-tool_uploadexternalcontentresults $MOODLE_DOCKER_MODULES/admin/tool/uploadexternalcontentresults
 else
     echo
     echo "*** Updating moodle-tool_uploadexternalcontentresults"
@@ -145,7 +145,7 @@ then
     echo
     echo "*** Cloning moodle-mod_externalcontent"
     echo "*** $MOODLE_DOCKER_MODULES/mod/externalcontent does not exist, cloning"
-    git clone git://github.com/lushonline/moodle-mod_externalcontent $MOODLE_DOCKER_MODULES/mod/externalcontent
+    git clone https://github.com/lushonline/moodle-mod_externalcontent $MOODLE_DOCKER_MODULES/mod/externalcontent
 else
     echo
     echo "*** Updating moodle-mod_externalcontent"
@@ -166,7 +166,7 @@ then
     echo
     echo "*** Cloning moodle-mod_percipio"
     echo "*** $MOODLE_DOCKER_MODULES/mod/percipio does not exist, cloning"
-    git clone git://github.com/skillsoftadmin/moodle-mod_percipio $MOODLE_DOCKER_MODULES/mod/percipio
+    git clone https://github.com/skillsoftadmin/moodle-mod_percipio $MOODLE_DOCKER_MODULES/mod/percipio
 else
     echo
     echo "*** Updating moodle-mod_percipio"
