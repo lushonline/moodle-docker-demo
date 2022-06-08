@@ -161,6 +161,27 @@ else
     cd $basedir
 fi
 
+if [ ! -d "$MOODLE_DOCKER_MODULES/mod/percipio" ];
+then
+    echo
+    echo "*** Cloning moodle-mod_percipio"
+    echo "*** $MOODLE_DOCKER_MODULES/mod/percipio does not exist, cloning"
+    git clone git://github.com/skillsoftadmin/moodle-mod_percipio $MOODLE_DOCKER_MODULES/mod/percipio
+else
+    echo
+    echo "*** Updating moodle-mod_percipio"
+    echo "*** $MOODLE_DOCKER_MODULES/mod/percipio exists, updating"
+    cd $MOODLE_DOCKER_MODULES/mod/percipio
+    echo
+    echo "*** Fetch any updates from branch"
+    echo
+    git fetch --all
+    echo
+    git status
+    echo
+    cd $basedir
+fi
+
 echo
 echo "*** Ensure customized config.php for the Docker containers is in place"
 cp $basedir/config.docker-template.php $MOODLE_DOCKER_WWWROOT/config.php

@@ -189,6 +189,26 @@ CD %cd%
 echo.
 echo.
 
+:CLONEPERCIPIO
+IF EXIST %BASEDIR%\%MOODLE_DOCKER_MODULES%\mod\percipio\%NUL% GOTO FETCHPERCIPIO
+echo.
+echo *** Cloning moodle-mod_percipio
+echo.
+call git clone git://github.com/skillsoftadmin/moodle-mod_percipio "%BASEDIR%\%MOODLE_DOCKER_MODULES%\mod\percipio"
+echo.
+GOTO FINISHMODULES
+
+:FETCHPERCIPIO
+echo Updating moodle-mod_percipio
+echo.
+echo Fetch https://github.com/skillsoftadmin/moodle-mod_percipio
+CD "%BASEDIR%\%MOODLE_DOCKER_MODULES%\mod\percipio"
+call git fetch --all
+call git status
+CD %cd%
+echo.
+echo.
+
 :FINISHMODULES
 POPD
 echo.
