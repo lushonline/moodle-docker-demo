@@ -41,7 +41,7 @@ IF EXIST %BASEDIR%\%MOODLE_DOCKER_WWWROOT%\%NUL% GOTO FETCHMOODLE
 echo.
 echo *** Cloning Moodle branch: %MOODLE_VERSION%
 echo.
-call git clone --branch %MOODLE_VERSION% --depth 1 --single-branch git://github.com/moodle/moodle %BASEDIR%\%MOODLE_DOCKER_WWWROOT%
+call git clone --branch %MOODLE_VERSION% --depth 1 --single-branch https://github.com/moodle/moodle %BASEDIR%\%MOODLE_DOCKER_WWWROOT%
 echo.
 GOTO FINISH
 
@@ -97,7 +97,7 @@ IF EXIST %BASEDIR%\%MOODLE_DOCKER_MODULES%\admin\tool\uploadpage\%NUL% GOTO FETC
 echo.
 echo *** Cloning moodle-tool_uploadpage
 echo.
-call git clone git://github.com/lushonline/moodle-tool_uploadpage "%BASEDIR%\%MOODLE_DOCKER_MODULES%\admin\tool\uploadpage\"
+call git clone https://github.com/lushonline/moodle-tool_uploadpage "%BASEDIR%\%MOODLE_DOCKER_MODULES%\admin\tool\uploadpage\"
 echo.
 GOTO CLONEUPLOADPAGERESULTS
 
@@ -115,7 +115,7 @@ IF EXIST %BASEDIR%\%MOODLE_DOCKER_MODULES%\admin\tool\uploadpageresults\%NUL% GO
 echo.
 echo *** Cloning moodle-tool_uploadpageresults
 echo.
-call git clone git://github.com/lushonline/moodle-tool_uploadpageresults "%BASEDIR%\%MOODLE_DOCKER_MODULES%\admin\tool\uploadpageresults\"
+call git clone https://github.com/lushonline/moodle-tool_uploadpageresults "%BASEDIR%\%MOODLE_DOCKER_MODULES%\admin\tool\uploadpageresults\"
 echo.
 GOTO CLONEUPLOADEXTERNALCONTENT
 
@@ -134,7 +134,7 @@ IF EXIST %BASEDIR%\%MOODLE_DOCKER_MODULES%\admin\tool\uploadexternalcontent\%NUL
 echo.
 echo *** Cloning moodle-tool_uploadexternalcontent
 echo.
-call git clone git://github.com/lushonline/moodle-tool_uploadexternalcontent "%BASEDIR%\%MOODLE_DOCKER_MODULES%\admin\tool\uploadexternalcontent\"
+call git clone https://github.com/lushonline/moodle-tool_uploadexternalcontent "%BASEDIR%\%MOODLE_DOCKER_MODULES%\admin\tool\uploadexternalcontent\"
 echo.
 GOTO CLONEUPLOADEXTERNALCONTENTRESULTS
 
@@ -154,7 +154,7 @@ IF EXIST %BASEDIR%\%MOODLE_DOCKER_MODULES%\admin\tool\uploadexternalcontentresul
 echo.
 echo *** Cloning moodle-tool_uploadexternalcontentresults
 echo.
-call git clone git://github.com/lushonline/moodle-tool_uploadexternalcontentresults "%BASEDIR%\%MOODLE_DOCKER_MODULES%\admin\tool\uploadexternalcontentresults\"
+call git clone https://github.com/lushonline/moodle-tool_uploadexternalcontentresults "%BASEDIR%\%MOODLE_DOCKER_MODULES%\admin\tool\uploadexternalcontentresults\"
 echo.
 GOTO CLONEEXTERNALCONTENT
 
@@ -169,12 +169,32 @@ CD %cd%
 echo.
 echo.
 
+:CLONEPERCIPIOEXTERNALCONTENTSYNC
+IF EXIST %BASEDIR%\%MOODLE_DOCKER_MODULES%\admin\tool\percipioexternalcontentsync\%NUL% GOTO FETCHPERCIPIOEXTERNALCONTENTSYNC
+echo.
+echo *** Cloning moodle-tool_percipioexternalcontentsync
+echo.
+call git clone https://github.com/lushonline/moodle-tool_percipioexternalcontentsync "%BASEDIR%\%MOODLE_DOCKER_MODULES%\admin\tool\percipioexternalcontentsync\"
+echo.
+GOTO CLONEEXTERNALCONTENT
+
+:FETCHPERCIPIOEXTERNALCONTENTSYNC
+echo Updating moodle-tool_percipioexternalcontentsync
+echo.
+echo Fetch https://github.com/lushonline/moodle-tool_percipioexternalcontentsync
+CD "%BASEDIR%\%MOODLE_DOCKER_MODULES%\admin\tool\percipioexternalcontentsync"
+call git fetch --all
+call git status
+CD %cd%
+echo.
+echo.
+
 :CLONEEXTERNALCONTENT
 IF EXIST %BASEDIR%\%MOODLE_DOCKER_MODULES%\mod\externalcontent\%NUL% GOTO FETCHEXTERNALCONTENT
 echo.
 echo *** Cloning moodle-mod_externalcontent
 echo.
-call git clone git://github.com/lushonline/moodle-mod_externalcontent "%BASEDIR%\%MOODLE_DOCKER_MODULES%\mod\externalcontent"
+call git clone https://github.com/lushonline/moodle-mod_externalcontent "%BASEDIR%\%MOODLE_DOCKER_MODULES%\mod\externalcontent"
 echo.
 GOTO FINISHMODULES
 
@@ -189,25 +209,6 @@ CD %cd%
 echo.
 echo.
 
-:CLONEPERCIPIO
-IF EXIST %BASEDIR%\%MOODLE_DOCKER_MODULES%\mod\percipio\%NUL% GOTO FETCHPERCIPIO
-echo.
-echo *** Cloning moodle-mod_percipio
-echo.
-call git clone git://github.com/skillsoftadmin/moodle-mod_percipio "%BASEDIR%\%MOODLE_DOCKER_MODULES%\mod\percipio"
-echo.
-GOTO FINISHMODULES
-
-:FETCHPERCIPIO
-echo Updating moodle-mod_percipio
-echo.
-echo Fetch https://github.com/skillsoftadmin/moodle-mod_percipio
-CD "%BASEDIR%\%MOODLE_DOCKER_MODULES%\mod\percipio"
-call git fetch --all
-call git status
-CD %cd%
-echo.
-echo.
 
 :FINISHMODULES
 POPD
