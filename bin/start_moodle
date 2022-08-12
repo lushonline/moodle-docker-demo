@@ -12,6 +12,17 @@ fi
 
 bin/moodle-docker-compose up -d
 
+echo "Get Webserver Container ID"
+docker container ls -aqf name=webserver > containerid.txt
+while read line; do export "containerid=${line}";
+done < containerid.txt
+
+echo "Copy extra PHP configuration to webserver"
+docker cp "${basedir}/docker-php-limits.ini" "${containerid}:/usr/local/etc/php/conf.d/docker-php-limits.ini"
+
+echo "Restart Apache"
+bin/moodle-docker-compose exec webserver bash -c "/etc/init.d/apache2 reload"
+
 echo "Moodle is running please. Browse to - http://${MOODLE_DOCKER_WEB_HOST}:${MOODLE_DOCKER_WEB_PORT}"
 echo "Moodle Admin Username: admin"
 echo "Moodle Admin password: test"

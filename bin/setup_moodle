@@ -145,6 +145,7 @@ then
     echo
     echo "*** Cloning moodle-tool_percipioexternalcontentsync"
     echo "*** $MOODLE_DOCKER_MODULES/admin/tool/percipioexternalcontentsync does not exist, cloning"
+    #git clone --branch 20-enhancement-provide-flexibilty-in-formatting-the-html-shown-for-item https://github.com/lushonline/moodle-tool_percipioexternalcontentsync $MOODLE_DOCKER_MODULES/admin/tool/percipioexternalcontentsync
     git clone https://github.com/lushonline/moodle-tool_percipioexternalcontentsync $MOODLE_DOCKER_MODULES/admin/tool/percipioexternalcontentsync
 else
     echo
@@ -166,6 +167,7 @@ then
     echo
     echo "*** Cloning moodle-mod_externalcontent"
     echo "*** $MOODLE_DOCKER_MODULES/mod/externalcontent does not exist, cloning"
+    #git clone --branch 5-add-moodle-mobile-app-support https://github.com/lushonline/moodle-mod_externalcontent $MOODLE_DOCKER_MODULES/mod/externalcontent
     git clone https://github.com/lushonline/moodle-mod_externalcontent $MOODLE_DOCKER_MODULES/mod/externalcontent
 else
     echo

@@ -41,6 +41,17 @@ IF NOT "%MOODLE_DOCKER_NGROK_HOST%"=="" (
     call bin\moodle-docker-compose up -d
     echo.
     echo.
+    echo "Get Webserver Container ID"
+docker container ls -aqf name=webserver > containerid.txt
+while read line; do export "containerid=${line}";
+done < containerid.txt
+
+echo "Copy extra PHP configuration to webserver"
+docker cp "${basedir}/docker-php-limits.ini" "${containerid}:/usr/local/etc/php/conf.d/docker-php-limits.ini"
+
+echo "Restart Apache"
+bin/moodle-docker-compose exec webserver bash -c "/etc/init.d/apache2 reload"
+    
     echo *** Moodle is available via NGROK. Browse to - %MOODLE_DOCKER_NGROK_HOST%
     echo.
     echo *** Moodle Admin Username: admin
