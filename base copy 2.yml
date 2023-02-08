@@ -1,0 +1,50 @@
+version: "2"
+services:
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: moodle
+      POSTGRES_PASSWORD: moodle
+      POSTGRES_DB: ${MOODLE_VERSION}
+      PGDATA: /var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+  dbadmin:
+    image: "dpage/pgadmin4"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "user@moodle.com"
+      PGADMIN_DEFAULT_PASSWORD: "moodle"
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+      - "${MOODLE_DOCKER_ASSETDIR}/pgadmin4/servers.json:/pgadmin4/servers.json"
+    ports:
+      - "5050:80"
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - "8025:8025"
+  webserver:
+    image: "moodlehq/moodle-php-apache:${MOODLE_DOCKER_PHP_VERSION}"
+    # The UID:GID that owns the moodle folders
+    # Only needed for LINUX/WSL2
+    user: ${MOODLE_UID}:${MOODLE_GID}
+    depends_on:
+      - db
+      - mailhog
+    volumes:
+      - "${MOODLE_DOCKER_WWWROOT}:/var/www/html:rw"
+      - "${MOODLE_DOCKER_MOODLEDATA}:/var/www/moodledata:rw"
+      - "${MOODLE_DOCKER_ASSETDIR}/web/apache2_faildumps.conf:/etc/apache2/conf-enabled/apache2_faildumps.conf"
+      - "${MOODLE_DOCKER_ASSETDIR}/web/apache2_mailhog.conf:/etc/apache2/conf-enabled/apache2_mailhog.conf"
+    environment:
+      MOODLE_DOCKER_DBTYPE: pgsql
+      MOODLE_DOCKER_DBNAME: ${MOODLE_VERSION}
+      MOODLE_DOCKER_DBUSER: moodle
+      MOODLE_DOCKER_DBPASS: moodle
+      MOODLE_DOCKER_WEB_HOST: ${MOODLE_DOCKER_WEB_HOST}
+      MOODLE_DOCKER_NGROK_HOST: ${MOODLE_DOCKER_NGROK_HOST}
+volumes:
+  pgdata:
+  pgadmin:

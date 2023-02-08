@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+echo "Run the Moodle CLI script: admin/cli/cron.php"
+bin/moodle-docker-compose exec webserver `cd /var/www/html && php -i`

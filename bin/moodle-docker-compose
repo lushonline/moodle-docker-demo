@@ -20,7 +20,7 @@ fi
 export MOODLE_UID="$(id -u)"
 export MOODLE_GID="$(id -g)"
 
-dockercompose="docker-compose --project-name ${MOODLE_VERSION} -f ${basedir}/base.yml"
+dockercompose="docker-compose --project-name ${MOODLE_VERSION,,} -f ${basedir}/base.yml"
 
 # Mac OS Compatbility
 if [[ "$(uname)" == "Darwin" ]]; then

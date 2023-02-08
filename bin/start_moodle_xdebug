@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+set -e
+source "$(dirname "$0")/dotenv"
+source "$(dirname "$0")/basedir"
+
+basedir=$(basedir)
+
+if [ ! -n "$MOODLE_VERSION" ];
+then
+  .env export
+fi
+
+bin/moodle-docker-compose up -d
+
+echo "Get Webserver Container ID"
+docker container ls -aqf name=webserver > containerid.txt
+while read line; do export "containerid=${line}";
+done < containerid.txt
+
+echo "Webserver Container ID: ${containerid}"
+
+until [ "`docker inspect -f {{.State.Running}} ${containerid}`"=="true" ]; do
+    echo "Waiting for Webserver Container"
+    sleep 0.1;
+done;
+
+
+echo "Install XDebug extension with PECL"
+bin/moodle-docker-compose exec -u 0 webserver bash -c "pecl install xdebug"
+
+#echo "Backup Original docker-php-ext-xdebug.ini on webserver"
+#exec webserver bash -c "cp /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.original"
+
+echo "Copy extra PHP configuration to webserver"
+docker cp "${basedir}/docker-php-ext-xdebug-extras.ini" "${containerid}:/usr/local/etc/php/conf.d/docker-php-ext-xdebug-extras.ini"
+
+echo "Copy XDebug extra configuration webserver"
+docker cp "${basedir}/docker-php-limits.ini" "${containerid}:/usr/local/etc/php/conf.d/docker-php-limits.ini"
+
+echo "Enable XDebug extension"
+bin/moodle-docker-compose exec -u 0 webserver bash -c "docker-php-ext-enable xdebug"
+
+echo "Restart Apache"
+bin/moodle-docker-compose exec webserver bash -c "/etc/init.d/apache2 reload"
+
+echo "Moodle is running please. Browse to - http://${MOODLE_DOCKER_WEB_HOST}:${MOODLE_DOCKER_WEB_PORT}"
+echo "Moodle Admin Username: admin"
+echo "Moodle Admin password: test"

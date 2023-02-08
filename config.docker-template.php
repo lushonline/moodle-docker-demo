@@ -63,5 +63,7 @@ $CFG->debugstringids = 1; // Add strings=1 to url to get string ids.
 $CFG->allowthemechangeonurl = 1;
 $CFG->passwordpolicy = 0;
 
+$CFG->phpunit_dataroot  = '/var/www/phpunitdata';
+$CFG->phpunit_prefix = 't_';
 
 require_once(__DIR__ . '/lib/setup.php');
