@@ -26,10 +26,6 @@ services:
     ports:
       - "8025:8025"
   webserver:
-    build:
-      context: ./
-      args:
-        PHP_VERSION: ${MOODLE_DOCKER_PHP_VERSION}
     image: "moodlehq/moodle-php-apache:${MOODLE_DOCKER_PHP_VERSION}"
     # The UID:GID that owns the moodle folders
     # Only needed for LINUX/WSL2
@@ -42,7 +38,6 @@ services:
       - "${MOODLE_DOCKER_MOODLEDATA}:/var/www/moodledata:rw"
       - "${MOODLE_DOCKER_ASSETDIR}/web/apache2_faildumps.conf:/etc/apache2/conf-enabled/apache2_faildumps.conf"
       - "${MOODLE_DOCKER_ASSETDIR}/web/apache2_mailhog.conf:/etc/apache2/conf-enabled/apache2_mailhog.conf"
-      - "tmp:/tmp"
     environment:
       MOODLE_DOCKER_DBTYPE: pgsql
       MOODLE_DOCKER_DBNAME: ${MOODLE_VERSION}
@@ -50,15 +45,6 @@ services:
       MOODLE_DOCKER_DBPASS: moodle
       MOODLE_DOCKER_WEB_HOST: ${MOODLE_DOCKER_WEB_HOST}
       MOODLE_DOCKER_NGROK_HOST: ${MOODLE_DOCKER_NGROK_HOST}
-  webgrind:
-    image: jokkedk/webgrind:latest
-    restart: unless-stopped
-    ports:
-      - "80:80"
-    volumes:
-      # Replace '/path/to/xdebug/files' with the actual path of the xDebug profiling files
-      - "tmp:/tmp"
 volumes:
   pgdata:
   pgadmin:
-  tmp:

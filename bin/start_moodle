@@ -17,13 +17,6 @@ docker container ls -aqf name=webserver > containerid.txt
 while read line; do export "containerid=${line}";
 done < containerid.txt
 
-echo "Webserver Container ID: ${containerid}"
-
-until [ "`docker inspect -f {{.State.Running}} ${containerid}`"=="true" ]; do
-    echo "Waiting for Webserver Container"
-    sleep 0.1;
-done;
-
 echo "Copy extra PHP configuration to webserver"
 docker cp "${basedir}/docker-php-limits.ini" "${containerid}:/usr/local/etc/php/conf.d/docker-php-limits.ini"
 
