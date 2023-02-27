@@ -8,9 +8,10 @@
       "name": "Listen for XDebug",
       "type": "php",
       "request": "launch",
-      "port": 9000,
+      "port": 9003,
+      "hostname": "localhost",
       "pathMappings": {
-        "/var/www/html": "${workspaceFolder}/assets/moodle_MOODLE_311_STABLE"
+        "/var/www/html": "${workspaceFolder}/assets/moodle_moodle_400_stable"
       },
       "xdebugSettings": {
         "max_data": 65535,

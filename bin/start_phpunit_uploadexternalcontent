@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+# Initialize phpunit environment
+echo "Initialize PHP Unit"
+bin/moodle-docker-compose exec webserver php admin/tool/phpunit/cli/init.php
+
+# Run phpunit tests
+echo "Run uploadexternalcontent Unit Tests"
+bin/moodle-docker-compose exec webserver vendor/bin/phpunit admin/tool/uploadexternalcontent/tests/importer_test.php
+
+
+
+
+

@@ -26,7 +26,7 @@ done;
 
 
 echo "Install XDebug extension with PECL"
-bin/moodle-docker-compose exec -u 0 webserver bash -c "pecl install xdebug"
+bin/moodle-docker-compose exec -u 0 webserver bash -c "pecl install xdebug-3.1.6"
 
 #echo "Backup Original docker-php-ext-xdebug.ini on webserver"
 #exec webserver bash -c "cp /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.original"

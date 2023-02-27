@@ -1,4 +1,5 @@
 assets/moodle_modules/*
 assets/moodledata_*
 assets/moodle_MOODLE_*
+assets/phpunitdata_*
 containerid.txt

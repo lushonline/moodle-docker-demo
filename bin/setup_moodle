@@ -19,6 +19,13 @@ then
     mkdir $MOODLE_DOCKER_MOODLEDATA
 fi
 
+if [ ! -d "$MOODLE_DOCKER_PHPUNITDATA" ];
+then
+    echo
+    echo "*** $MOODLE_DOCKER_PHPUNITDATA does not exist, creating"
+    mkdir $MOODLE_DOCKER_PHPUNITDATA
+fi
+
 if [ ! -d "$MOODLE_DOCKER_MODULES" ];
 then
     echo

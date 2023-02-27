@@ -66,4 +66,19 @@ $CFG->passwordpolicy = 0;
 $CFG->phpunit_dataroot  = '/var/www/phpunitdata';
 $CFG->phpunit_prefix = 't_';
 
+$CFG->behat_wwwroot   = 'http://webserver';
+$CFG->behat_dataroot  = '/var/www/behatdata';
+$CFG->behat_prefix = 'b_';
+$CFG->behat_profiles = array(
+    'default' => array(
+        'browser' => getenv('MOODLE_DOCKER_BROWSER'),
+        'wd_host' => 'http://selenium:4444/wd/hub',
+    ),
+);
+$CFG->behat_faildump_path = '/var/www/behatfaildumps';
+$CFG->behat_increasetimeout = 2;
+
+define('PHPUNIT_LONGTEST', true);
+
+
 require_once(__DIR__ . '/lib/setup.php');
