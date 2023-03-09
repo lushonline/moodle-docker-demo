@@ -22,20 +22,13 @@ docker cp "${basedir}/docker-php-limits.ini" "${containerid}:/usr/local/etc/php/
 echo "Restart Apache"
 bin/moodle-docker-compose exec webserver bash -c "/etc/init.d/apache2 reload"
 
-echo "Run the Moodle CLI script: admin/cli/install_database.php"
-bin/moodle-docker-compose exec webserver php admin/cli/install_database.php --agree-license --fullname="Docker moodle" --shortname="docker_moodle" --adminpass="test" --adminemail="admin@example.com"
+echo "Run the Moodle CLI script: admin/cli/cfg.php to get the current config"
+bin/moodle-docker-compose exec webserver php admin/cli/cfg.php --name=enrol_plugins_enabled
 
-echo "Run the Moodle CLI script: admin/cli/cfg.php to configure the xapi credentials"
-bin/moodle-docker-compose exec webserver php admin/cli/cfg.php --component=externalcontent --name=xapiusername --set=4j09hapVift36ONxYbLDZkRH
-bin/moodle-docker-compose exec webserver php admin/cli/cfg.php --component=externalcontent --name=xapipassword --set=E3dyJMh4xqw9B8u7eikmCKWX
-
-echo "Run the Moodle CLI script: admin/cli/cfg.php to show the xapi credentials"
-bin/moodle-docker-compose exec webserver php admin/cli/cfg.php --component=externalcontent
-
-echo "Run the Moodle CLI script: admin/cli/cfg.php to configure the enrolment methods to self,manual"
+echo "Run the Moodle CLI script: admin/cli/cfg.php to set the config"
 bin/moodle-docker-compose exec webserver php admin/cli/cfg.php --name=enrol_plugins_enabled --set=self,manual
 
-echo "Run the Moodle CLI script: admin/cli/cfg.php to show the enrolment methods"
+echo "Run the Moodle CLI script: admin/cli/cfg.php to get the current config"
 bin/moodle-docker-compose exec webserver php admin/cli/cfg.php --name=enrol_plugins_enabled
 
 echo "Moodle is running please. Browse to - http://${MOODLE_DOCKER_WEB_HOST}:${MOODLE_DOCKER_WEB_PORT}"

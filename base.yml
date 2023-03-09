@@ -39,6 +39,7 @@ services:
       - "${MOODLE_DOCKER_PHPUNITDATA}:/var/www/phpunitdata:rw"
       - "${MOODLE_DOCKER_ASSETDIR}/web/apache2_faildumps.conf:/etc/apache2/conf-enabled/apache2_faildumps.conf"
       - "${MOODLE_DOCKER_ASSETDIR}/web/apache2_mailhog.conf:/etc/apache2/conf-enabled/apache2_mailhog.conf"
+      - "${MOODLE_DOCKER_ASSETDIR}/web/apache2_alias.conf:/etc/apache2/conf-enabled/apache2_alias.conf"
     extra_hosts:
       - "host.docker.internal:host-gateway"
     environment:
