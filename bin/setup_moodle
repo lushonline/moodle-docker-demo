@@ -63,6 +63,28 @@ fi
 echo "*** Ensure moodle customaddons are installed"
 echo
 
+if [ ! -d "$MOODLE_DOCKER_MODULES/local/externalthumbnails" ];
+then
+    echo
+    echo "*** Cloning moodle-tool_uploadexternalcontent"
+    echo "*** $MOODLE_DOCKER_MODULES/local/externalthumbnails does not exist, cloning"
+    #git clone https://github.com/lushonline/moodle-local_externalthumbnails $MOODLE_DOCKER_MODULES/local/externalthumbnails
+else
+    echo
+    echo "*** Updating moodle-local_externalthumbnails"
+    echo "*** $MOODLE_DOCKER_MODULES/local/externalthumbnails exists, updating"
+    cd $MOODLE_DOCKER_MODULES/local/externalthumbnails
+    echo
+    echo "*** Fetch any updates from branch"
+    echo
+    #git fetch --all
+    echo
+    #git status
+    echo
+    cd $basedir
+fi
+
+
 if [ ! -d "$MOODLE_DOCKER_MODULES/admin/tool/uploadexternalcontent" ];
 then
     echo

@@ -92,6 +92,24 @@ echo *** Ensure moodle customaddons are installed
 echo.
 PUSHD %cd%
 
+:CLONEEXTERNALTHUMBNAILS
+IF EXIST %BASEDIR%\%MOODLE_DOCKER_MODULES%\local\externalthumbnails\%NUL% GOTO FETCHUPLOADPAGE
+echo.
+echo *** Cloning moodle-local_externalthumbnails
+echo.
+call git clone https://github.com/lushonline/moodle-local_externalthumbnails "%BASEDIR%\%MOODLE_DOCKER_MODULES%\local\externalthumbnails\"
+echo.
+GOTO CLONEUPLOADPAGE
+
+:FETCHEXTERNALTHUMBNAILS
+echo Updating moodle-local_externalthumbnails
+echo.
+echo Fetch https://github.com/lushonline/moodle-local_externalthumbnails
+CD "%BASEDIR%\%MOODLE_DOCKER_MODULES%\local\externalthumbnails"
+call git fetch --all
+call git status
+echo.
+
 :CLONEUPLOADPAGE
 IF EXIST %BASEDIR%\%MOODLE_DOCKER_MODULES%\admin\tool\uploadpage\%NUL% GOTO FETCHUPLOADPAGE
 echo.
