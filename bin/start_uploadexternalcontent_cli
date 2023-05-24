@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 export MOODLE_UPLOAD_FILE=${MOODLE_UPLOAD_FILE:-uploadexternalcontent.csv}
 export MOODLE_UPLOAD_CATEGORYID=${MOODLE_UPLOAD_CATEGORYID:-1}
+export MOODLE_UPLOAD_DOWNDLOADTHUMBNAIL=${MOODLE_UPLOAD_DOWNDLOADTHUMBNAIL:-0}
 
 echo "Run the Moodle CLI script: admin/tool/uploadexternalcontent/cli/uploadexternalcontent.php"
-bin/moodle-docker-compose exec webserver php admin/tool/uploadexternalcontent/cli/uploadexternalcontent.php --source=../../../../${MOODLE_UPLOAD_FILE} --categoryid=${MOODLE_UPLOAD_CATEGORYID}
+bin/moodle-docker-compose exec webserver php admin/tool/uploadexternalcontent/cli/uploadexternalcontent.php --source=../../../../${MOODLE_UPLOAD_FILE} --categoryid=${MOODLE_UPLOAD_CATEGORYID} --downloadthumbnail=${MOODLE_UPLOAD_DOWNDLOADTHUMBNAIL}
