@@ -9,7 +9,7 @@ then
   echo
   echo "*** Setting Environment variables from .env"
   .env export
-
+  echo
 fi
 
 if [ ! -d "$MOODLE_DOCKER_BEHAT_FAILDUMP" ];
@@ -17,14 +17,27 @@ then
     echo
     echo "*** $MOODLE_DOCKER_BEHAT_FAILDUMP does not exist, creating"
     mkdir $MOODLE_DOCKER_BEHAT_FAILDUMP
+    echo
 fi
 
-export MOODLE_BEHAT_TAG=${MOODLE_BEHAT_TAG:-"@mod_externalcontent"}
-
-# Initialize BEHAT environment
-echo "Initialize BEHAT"
-bin/moodle-docker-compose exec webserver php admin/tool/behat/cli/init.php
-
-# Run BEHAT tests
-echo "Run BEHAT Tests for tags=$MOODLE_BEHAT_TAG"
-bin/moodle-docker-compose exec -u www-data webserver php admin/tool/behat/cli/run.php --tags=$MOODLE_BEHAT_TAG --format="moodle_list"
+if [[ ! -v MOODLE_BEHAT_TAG ]]; then
+    echo "MOODLE_BEHAT_TAG is not set. Please set to the behat tag you want to test for example @mod_externalcontent"
+elif [[ -z "$MOODLE_BEHAT_TAG" ]]; then
+    echo "MOODLE_BEHAT_TAG is set to the empty string.  Please set to the behat tag you want to test for example @mod_externalcontent"
+else
+    echo "Running BEHAT tests for tag: $MOODLE_BEHAT_TAG"
+    echo
+    echo "Starting Docker Containers"
+    bin/moodle-docker-compose up -d
+    echo
+    # Initialize BEHAT environment
+    echo "Initialize BEHAT"
+    bin/moodle-docker-compose exec webserver php admin/tool/behat/cli/init.php
+    echo
+    # Run BEHAT tests
+    echo "Run BEHAT Tests for tags=$MOODLE_BEHAT_TAG"
+    bin/moodle-docker-compose exec -u www-data webserver php admin/tool/behat/cli/run.php --tags=$MOODLE_BEHAT_TAG --format="moodle_progress"
+    echo
+    echo "Stopping Docker Containers"
+    bin/moodle-docker-compose down
+fi

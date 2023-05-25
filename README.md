@@ -48,6 +48,7 @@ cd moodle-docker-demo
 sudo addgroup -g 33 --system www-data
 sudo usermod -a -G www-data $USER
 sudo chown www-data:www-data -R assets
+sudo chmod -R 777 assets
 ```
 
 - Configure the details in the .env file, the default is configured for Moodle 4.1 Stable
