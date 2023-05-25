@@ -36,7 +36,7 @@ else
     echo
     # Run BEHAT tests
     echo "Run BEHAT Tests for tags=$MOODLE_BEHAT_TAG"
-    bin/moodle-docker-compose exec -u www-data webserver php admin/tool/behat/cli/run.php --tags=$MOODLE_BEHAT_TAG --format="moodle_progress"
+    bin/moodle-docker-compose exec webserver php admin/tool/behat/cli/run.php --tags=$MOODLE_BEHAT_TAG --format="moodle_progress"
     echo
     echo "Stopping Docker Containers"
     bin/moodle-docker-compose down

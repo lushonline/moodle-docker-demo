@@ -41,14 +41,30 @@ To ensure that the docker containers can access the volumes mounted inside your 
 
 * has a www-data user and it is GID 33 (this is same GID as the moodlehq/moodle-php-apache)
 * your user account is a member of the www-data in WSL2 group
+* the www-data account is a member of your personal group
 * the assets folder is owned by www-data.
 
 ```bash
 cd moodle-docker-demo
-sudo addgroup -g 33 --system www-data
-sudo usermod -a -G www-data $USER
-sudo chown www-data:www-data -R assets
+# Check your id and group
+id
+# Output will look something like this
+# uid=1000(yourwsl2username) gid=1000(yourwsl2username) groups=1000(yourwsl2username),4(adm),24(cdrom),27(sudo),30(dip),46(plugdev),1001(docker)
+#
+# Check www-data id and group
+id www-data
+# Output will look something like this
+# uid=33(www-data) gid=33(www-data) groups=33(www-data)
+#
+# Add your user account to the www-data group - this is the name in the () after the uid, in the example yourwsl2username
+sudo usermod -a -G www-data yourwsl2username
+# Add www-data account to your personal group, the group is the name in the () after the gid, in the example yourwsl2username
+sudo usermod -a -G yourwsl2username www-data
+# Make sure the assets folder is set to be rwx for all
 sudo chmod -R 777 assets
+# Restart a WSL2 console and recheck the id info
+# Your account should now include in the groups list the www-data group
+# The www-data account shoudl now include your group in the groups list
 ```
 
 - Configure the details in the .env file, the default is configured for Moodle 4.1 Stable
