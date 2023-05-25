@@ -73,8 +73,16 @@ MOODLE_DOCKER_BROWSER=chrome
 
 - Run the setup script, this will clone the Moodle repositories, and plugins and start the Moodle command line install process.
 
-```
+```bash
 bin/setup_moodle
+```
+
+**IMPORTANT:** The first time you clone a new Moodle version make sure to chmod/chown the assets folder
+
+```bash
+cd moodle-docker-demo
+sudo chown www-data:www-data -R assets
+sudo chmod -R 777 assets
 ```
 
 ## Windows without WSL2
