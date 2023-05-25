@@ -12,6 +12,13 @@ then
 
 fi
 
+if [ ! -d "$MOODLE_DOCKER_ASSETDIR" ];
+then
+    echo
+    echo "*** $MOODLE_DOCKER_ASSETDIR does not exist, creating"
+    mkdir $MOODLE_DOCKER_ASSETDIR
+fi
+
 if [ ! -d "$MOODLE_DOCKER_MOODLEDATA" ];
 then
     echo
@@ -24,6 +31,13 @@ then
     echo
     echo "*** $MOODLE_DOCKER_PHPUNITDATA does not exist, creating"
     mkdir $MOODLE_DOCKER_PHPUNITDATA
+fi
+
+if [ ! -d "$MOODLE_DOCKER_BEHAT_FAILDUMP" ];
+then
+    echo
+    echo "*** $MOODLE_DOCKER_BEHAT_FAILDUMP does not exist, creating"
+    mkdir $MOODLE_DOCKER_BEHAT_FAILDUMP
 fi
 
 if [ ! -d "$MOODLE_DOCKER_MODULES" ];
@@ -66,9 +80,9 @@ echo
 if [ ! -d "$MOODLE_DOCKER_MODULES/local/externalthumbnails" ];
 then
     echo
-    echo "*** Cloning moodle-tool_uploadexternalcontent"
+    echo "*** Cloning moodle-local_externalthumbnails"
     echo "*** $MOODLE_DOCKER_MODULES/local/externalthumbnails does not exist, cloning"
-    #git clone https://github.com/lushonline/moodle-local_externalthumbnails $MOODLE_DOCKER_MODULES/local/externalthumbnails
+    git clone https://github.com/lushonline/moodle-local_externalthumbnails $MOODLE_DOCKER_MODULES/local/externalthumbnails
 else
     echo
     echo "*** Updating moodle-local_externalthumbnails"
@@ -77,9 +91,9 @@ else
     echo
     echo "*** Fetch any updates from branch"
     echo
-    #git fetch --all
+    git fetch --all
     echo
-    #git status
+    git status
     echo
     cd $basedir
 fi
@@ -90,7 +104,7 @@ then
     echo
     echo "*** Cloning moodle-tool_uploadexternalcontent"
     echo "*** $MOODLE_DOCKER_MODULES/admin/tool/uploadexternalcontent does not exist, cloning"
-    #git clone https://github.com/lushonline/moodle-tool_uploadexternalcontent $MOODLE_DOCKER_MODULES/admin/tool/uploadexternalcontent
+    git clone https://github.com/lushonline/moodle-tool_uploadexternalcontent $MOODLE_DOCKER_MODULES/admin/tool/uploadexternalcontent
 else
     echo
     echo "*** Updating moodle-tool_uploadexternalcontent"
@@ -99,9 +113,9 @@ else
     echo
     echo "*** Fetch any updates from branch"
     echo
-    #git fetch --all
+    git fetch --all
     echo
-    #git status
+    git status
     echo
     cd $basedir
 fi
@@ -111,7 +125,7 @@ then
     echo
     echo "*** Cloning moodle-tool_uploadexternalcontentresults"
     echo "*** $MOODLE_DOCKER_MODULES/admin/tool/uploadexternalcontentresults does not exist, cloning"
-    #git clone https://github.com/lushonline/moodle-tool_uploadexternalcontentresults $MOODLE_DOCKER_MODULES/admin/tool/uploadexternalcontentresults
+    git clone https://github.com/lushonline/moodle-tool_uploadexternalcontentresults $MOODLE_DOCKER_MODULES/admin/tool/uploadexternalcontentresults
 else
     echo
     echo "*** Updating moodle-tool_uploadexternalcontentresults"
@@ -120,51 +134,9 @@ else
     echo
     echo "*** Fetch any updates from branch"
     echo
-    #git fetch --all
+    git fetch --all
     echo
-    #git status
-    echo
-    cd $basedir
-fi
-
-if [ ! -d "$MOODLE_DOCKER_MODULES/admin/tool/uploadpage" ];
-then
-    echo
-    echo "*** Cloning moodle-tool_uploadpage"
-    echo "*** $MOODLE_DOCKER_MODULES/admin/tool/uploadpage does not exist, cloning"
-    #git clone https://github.com/lushonline/moodle-tool_uploadpage $MOODLE_DOCKER_MODULES/admin/tool/uploadpage
-else
-    echo
-    echo "*** Updating moodle-tool_uploadpage"
-    echo "*** $MOODLE_DOCKER_MODULES/admin/tool/uploadpage exists, updating"
-    cd $MOODLE_DOCKER_MODULES/admin/tool/uploadpage
-    echo
-    echo "*** Fetch any updates from branch"
-    echo
-    #git fetch --all
-    echo
-    #git status
-    echo
-    cd $basedir
-fi
-
-if [ ! -d "$MOODLE_DOCKER_MODULES/admin/tool/uploadpageresults" ];
-then
-    echo
-    echo "*** Cloning moodle-tool_uploadpageresults"
-    echo "*** $MOODLE_DOCKER_MODULES/admin/tool/uploadpageresults does not exist, cloning"
-    #git clone https://github.com/lushonline/moodle-tool_uploadpageresults $MOODLE_DOCKER_MODULES/admin/tool/uploadpageresults
-else
-    echo
-    echo "*** Updating moodle-tool_uploadpageresults"
-    echo "*** $MOODLE_DOCKER_MODULES/admin/tool/uploadpageresults exists, updating"
-    cd $MOODLE_DOCKER_MODULES/admin/tool/uploadpageresults
-    echo
-    echo "*** Fetch any updates from branch"
-    echo
-    #git fetch --all
-    echo
-    #git status
+    git status
     echo
     cd $basedir
 fi
@@ -174,7 +146,6 @@ then
     echo
     echo "*** Cloning moodle-tool_percipioexternalcontentsync"
     echo "*** $MOODLE_DOCKER_MODULES/admin/tool/percipioexternalcontentsync does not exist, cloning"
-    #git clone --branch 20-enhancement-provide-flexibilty-in-formatting-the-html-shown-for-item https://github.com/lushonline/moodle-tool_percipioexternalcontentsync $MOODLE_DOCKER_MODULES/admin/tool/percipioexternalcontentsync
     git clone https://github.com/lushonline/moodle-tool_percipioexternalcontentsync $MOODLE_DOCKER_MODULES/admin/tool/percipioexternalcontentsync
 else
     echo
@@ -196,7 +167,6 @@ then
     echo
     echo "*** Cloning moodle-mod_externalcontent"
     echo "*** $MOODLE_DOCKER_MODULES/mod/externalcontent does not exist, cloning"
-    #git clone --branch 13-bug-fix-call-to-externalcontent_set_randomlrscredentials-in-dbinstallphp https://github.com/lushonline/moodle-mod_externalcontent $MOODLE_DOCKER_MODULES/mod/externalcontent
     git clone https://github.com/lushonline/moodle-mod_externalcontent $MOODLE_DOCKER_MODULES/mod/externalcontent
 else
     echo

@@ -33,25 +33,41 @@ NOTE: The images will work under Docker on Windows, without WSL2, but the perfor
 - Open to your WSL2 linux instance command prompt
 - Clone the repository to a new folder
 
-```
+```bash
 git clone git://github.com/martinholden-skillsoft/moodle-docker-demo.git moodle-docker-demo
 ```
 
-- Configure the details in the .env file, the default is configured for Moodle 4.0 Stable
-  - To install a different version change all instances of **MOODLE_400_STABLE** to point to the correct Moodle Git BRANCH
+To ensure that the docker containers can access the volumes mounted inside your WSL2 Linux image you need to:
+
+* has a www-data user and it is GID 33 (this is same GID as the moodlehq/moodle-php-apache)
+* your user account is a member of the www-data in WSL2 group
+* the assets folder is owned by www-data.
+
+```bash
+cd moodle-docker-demo
+sudo addgroup -g 33 --system www-data
+sudo usermod -a -G www-data $USER
+sudo chown www-data:www-data -R assets
+```
+
+- Configure the details in the .env file, the default is configured for Moodle 4.1 Stable
+  - To install a different version change all instances of **MOODLE_401_STABLE** to point to the correct Moodle Git BRANCH
   - To use a different version of PHP change the **MOODLE_DOCKER_PHP_VERSION** to a valid version of [Moodle PHP Apache](https://github.com/moodlehq/moodle-php-apache)
 
 ```
 MOODLE_DOCKER_DB=pgsql
 MOODLE_DOCKER_ASSETDIR=./assets
 MOODLE_DOCKER_MODULES=./assets/moodle_modules
-MOODLE_DOCKER_MOODLEDATA=./assets/moodledata_MOODLE_400_STABLE
+MOODLE_DOCKER_MOODLEDATA=./assets/moodledata_moodle_401_stable
+MOODLE_DOCKER_PHPUNITDATA=./assets/phpunitdata_moodle_401_stable
+MOODLE_DOCKER_BEHAT_FAILDUMP=./assets/behat_moodle_401_stable
 MOODLE_DOCKER_PHP_VERSION=7.4
 MOODLE_DOCKER_WEB_HOST=localhost
 MOODLE_DOCKER_WEB_PORT=8000
-MOODLE_DOCKER_WWWROOT=./assets/moodle_MOODLE_400_STABLE
-MOODLE_VERSION=MOODLE_400_STABLE
+MOODLE_DOCKER_WWWROOT=./assets/moodle_moodle_401_stable
+MOODLE_VERSION=moodle_401_stable
 MOODLE_DOCKER_NGROK_HOST=
+MOODLE_DOCKER_BROWSER=chrome
 ```
 
 - Run the setup script, this will clone the Moodle repositories, and plugins and start the Moodle command line install process.
@@ -71,22 +87,25 @@ The images will work under Docker on Windows, without WSL2, but the performance 
 git clone git://github.com/martinholden-skillsoft/moodle-docker-demo.git moodle-docker-demo
 ```
 
-- Configure the details in the .env file, the default is configured for Moodle 3.11 Stable
+- Configure the details in the .env file, the default is configured for Moodle 4.1 Stable
   - For windows change the / to \
-  - To install a different version change all instances of **MOODLE_400_STABLE** to point to the correct Moodle Git BRANCH
+  - To install a different version change all instances of **MOODLE_401_STABLE** to point to the correct Moodle Git BRANCH
   - To use a different version of PHP change the **MOODLE_DOCKER_PHP_VERSION** to a valid version of [Moodle PHP Apache](https://github.com/moodlehq/moodle-php-apache)
 
 ```
 MOODLE_DOCKER_DB=pgsql
-MOODLE_DOCKER_ASSETDIR=.\assets
-MOODLE_DOCKER_MODULES=.\assets\moodle_modules
-MOODLE_DOCKER_MOODLEDATA=.\assets\moodledata_MOODLE_400_STABLE
+MOODLE_DOCKER_ASSETDIR=./assets
+MOODLE_DOCKER_MODULES=./assets/moodle_modules
+MOODLE_DOCKER_MOODLEDATA=./assets/moodledata_moodle_401_stable
+MOODLE_DOCKER_PHPUNITDATA=./assets/phpunitdata_moodle_401_stable
+MOODLE_DOCKER_BEHAT_FAILDUMP=./assets/behat_moodle_401_stable
 MOODLE_DOCKER_PHP_VERSION=7.4
 MOODLE_DOCKER_WEB_HOST=localhost
 MOODLE_DOCKER_WEB_PORT=8000
-MOODLE_DOCKER_WWWROOT=.\assets\moodle_MOODLE_400_STABLE
-MOODLE_VERSION=MOODLE_400_STABLE
+MOODLE_DOCKER_WWWROOT=./assets/moodle_moodle_401_stable
+MOODLE_VERSION=moodle_401_stable
 MOODLE_DOCKER_NGROK_HOST=
+MOODLE_DOCKER_BROWSER=chrome
 ```
 
 - Run the setup script, this will clone the Moodle repositories, and plugins and start the Moodle command line install process.

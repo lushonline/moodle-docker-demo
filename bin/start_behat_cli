@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+source "$(dirname "$0")/dotenv"
+source "$(dirname "$0")/basedir"
+
+basedir=$(basedir)
+echo $basedir
+if [ ! -n "$MOODLE_VERSION" ];
+then
+  echo
+  echo "*** Setting Environment variables from .env"
+  .env export
+
+fi
+
+if [ ! -d "$MOODLE_DOCKER_BEHAT_FAILDUMP" ];
+then
+    echo
+    echo "*** $MOODLE_DOCKER_BEHAT_FAILDUMP does not exist, creating"
+    mkdir $MOODLE_DOCKER_BEHAT_FAILDUMP
+fi
+
+export MOODLE_BEHAT_TAG=${MOODLE_BEHAT_TAG:-"@mod_externalcontent"}
+
+# Initialize BEHAT environment
+echo "Initialize BEHAT"
+bin/moodle-docker-compose exec webserver php admin/tool/behat/cli/init.php
+
+# Run BEHAT tests
+echo "Run uploadexternalcontent BEHAT Tests"
+bin/moodle-docker-compose exec -u www-data webserver php admin/tool/behat/cli/run.php --tags=$MOODLE_BEHAT_TAG
