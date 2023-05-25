@@ -26,5 +26,5 @@ echo "Initialize BEHAT"
 bin/moodle-docker-compose exec webserver php admin/tool/behat/cli/init.php
 
 # Run BEHAT tests
-echo "Run uploadexternalcontent BEHAT Tests"
-bin/moodle-docker-compose exec -u www-data webserver php admin/tool/behat/cli/run.php --tags=$MOODLE_BEHAT_TAG
+echo "Run BEHAT Tests for tags=$MOODLE_BEHAT_TAG"
+bin/moodle-docker-compose exec -u www-data webserver php admin/tool/behat/cli/run.php --tags=$MOODLE_BEHAT_TAG --format="moodle_list"
