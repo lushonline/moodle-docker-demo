@@ -9,8 +9,11 @@ then
   echo
   echo "*** Setting Environment variables from .env"
   .env export
-
 fi
+
+export MOODLE_GITHUB_URL=${MOODLE_GITHUB_URL:-https://github.com/moodle/moodle}
+echo
+echo "*** MOODLE_GITHUB_URL from $MOODLE_GITHUB_URL"
 
 if [ ! -d "$MOODLE_DOCKER_ASSETDIR" ];
 then
@@ -51,7 +54,7 @@ if [ ! -d "$MOODLE_DOCKER_WWWROOT" ];
 then
     echo
     echo "*** $MOODLE_DOCKER_WWWROOT does not exist, cloning branch ${MOODLE_VERSION^^}"
-    git clone --branch ${MOODLE_VERSION^^} --depth 1 --single-branch https://github.com/moodle/moodle $MOODLE_DOCKER_WWWROOT
+    git clone --branch ${MOODLE_VERSION^^} --depth 1 --single-branch $MOODLE_GITHUB_URL $MOODLE_DOCKER_WWWROOT
 else
     echo
     echo "*** $MOODLE_DOCKER_WWWROOT exists, updating"
