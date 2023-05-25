@@ -2,4 +2,6 @@ assets/moodle_modules/*
 assets/moodledata_*
 assets/moodle_MOODLE_*
 assets/phpunitdata_*
+assets/iomad_modules/*
+assets/iomad_iomad_*
 containerid.txt
