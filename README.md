@@ -42,7 +42,7 @@ To ensure that the docker containers can access the volumes mounted inside your 
 * has a www-data user and it is GID 33 (this is same GID as the moodlehq/moodle-php-apache)
 * your user account is a member of the www-data in WSL2 group
 * the www-data account is a member of your personal group
-* the assets folder is owned by www-data.
+* assets folder has rwx for all (Bruce force approach :-))
 
 ```bash
 cd moodle-docker-demo
