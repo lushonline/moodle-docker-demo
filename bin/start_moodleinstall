@@ -11,6 +11,10 @@ fi
 
 bin/moodle-docker-compose up -d
 
+echo "Waiting for DB"
+sleep 10
+echo
+
 echo "Get Webserver Container ID"
 docker container ls -aqf name=webserver > containerid.txt
 while read line; do export "containerid=${line}";

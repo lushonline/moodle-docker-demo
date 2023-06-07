@@ -30,6 +30,9 @@ else
     echo "Starting Docker Containers"
     bin/moodle-docker-compose up -d
     echo
+    echo "Waiting for DB"
+    sleep 10
+    echo
     # Initialize BEHAT environment
     echo "Initialize BEHAT"
     bin/moodle-docker-compose exec webserver php admin/tool/behat/cli/init.php

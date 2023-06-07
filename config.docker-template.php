@@ -66,24 +66,7 @@ $CFG->passwordpolicy = 0;
 $CFG->phpunit_dataroot  = '/var/www/phpunitdata';
 $CFG->phpunit_prefix = 't_';
 
-
-$behathost = 'webserver';
-if (!empty(getenv('MOODLE_DOCKER_BEHATWEB_HOST'))) {
-    $behathost = getenv('MOODLE_DOCKER_BEHATWEB_HOST');
-}
-
-$CFG->behat_wwwroot   = "http://{$behathost}";
-
-$behatport = getenv('MOODLE_DOCKER_BEHATWEB_PORT');
-if (!empty($behatport)) {
-    // Extract port in case the format is bind_ip:port.
-    $parts = explode(':', $behatport);
-    $pbehatportort = end($parts);
-    if ((string)(int)$behatport === (string)$behatport) { // Only if it's int value.
-        $CFG->behat_wwwroot .= ":{$behatport}";
-    }
-}
-
+$CFG->behat_wwwroot   = 'http://webserver';
 $CFG->behat_dataroot  = '/var/www/behatdata';
 $CFG->behat_prefix = 'b_';
 $CFG->behat_profiles = array(
