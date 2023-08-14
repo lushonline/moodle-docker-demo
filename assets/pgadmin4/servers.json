@@ -8,6 +8,15 @@
             "Host": "db",
             "SSLMode": "prefer",
             "MaintenanceDB": "postgres"
+        },
+        "2": {
+            "Name": "Moodle",
+            "Group": "Servers",
+            "Port": 3306,
+            "Username": "moodle",
+            "Host": "mariadb",
+            "SSLMode": "prefer",
+            "MaintenanceDB": "mysql"
         }
     }
 }
