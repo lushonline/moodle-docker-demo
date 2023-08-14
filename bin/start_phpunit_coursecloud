@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+# Initialize phpunit environment
+echo "Initialize PHP Unit"
+bin/moodle-docker-compose exec webserver php admin/tool/phpunit/cli/init.php
+
+# Run phpunit tests
+echo "Run coursecloud Unit Tests"
+bin/moodle-docker-compose exec webserver vendor/bin/phpunit course/format/coursecloud/tests/format_coursecloud_test.php
+
+bin/moodle-docker-compose exec webserver vendor/bin/phpunit --testsuite=format_coursecloud_testsuite
+
+

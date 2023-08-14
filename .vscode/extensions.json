@@ -1,0 +1,13 @@
+{
+  "recommendations": [
+    "vs-publisher-1448185.keyoti-changeallendoflinesequence",
+    "choppedcode.behat-complete",
+    "marcosvfranco.cucumberautocomplete-behat",
+    "editorconfig.editorconfig",
+    "xdebug.php-debug",
+    "neilbrayfield.php-docblocker",
+    "bmewburn.vscode-intelephense-client",
+    "wongjn.php-sniffer",
+    "dawhite.mustache"
+  ]
+}
